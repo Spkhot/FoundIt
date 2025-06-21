@@ -110,60 +110,62 @@
   </div>
 
   <script>
-    const form = document.getElementById('foundForm');
-    const message = document.getElementById('message');
-    const submitBtn = document.getElementById('submitBtn');
-    const imageUpload = document.getElementById('imageUpload');
-    const fileChosen = document.getElementById('file-chosen');
+  const BASE_URL = location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://foundit-imky.onrender.com"; // ✅ Your Render backend URL
 
-    // Update the label text when a file is chosen
-    imageUpload.addEventListener('change', () => {
-      if (imageUpload.files.length > 0) {
-        fileChosen.textContent = imageUpload.files[0].name;
-      } else {
+  const form = document.getElementById('foundForm');
+  const message = document.getElementById('message');
+  const submitBtn = document.getElementById('submitBtn');
+  const imageUpload = document.getElementById('imageUpload');
+  const fileChosen = document.getElementById('file-chosen');
+
+  // File input label update
+  imageUpload.addEventListener('change', () => {
+    fileChosen.textContent = imageUpload.files.length > 0
+      ? imageUpload.files[0].name
+      : 'Upload a Photo of the Item';
+  });
+
+  // Handle form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    message.textContent = "Submitting...";
+    message.className = "text-center mt-4 text-lg font-semibold text-yellow-400";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Posting...";
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/items`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        message.innerHTML = `✅ Item posted successfully! Thank you.`;
+        message.className = "text-center mt-4 text-lg font-semibold text-green-400";
+        form.reset();
         fileChosen.textContent = 'Upload a Photo of the Item';
-      }
-    });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      
-      // Provide immediate feedback
-      message.textContent = "Submitting...";
-      message.className = "text-center mt-4 text-lg font-semibold text-yellow-400";
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Posting...";
-
-      try {
-        const res = await fetch('http://localhost:5000/api/items', {
-          method: 'POST',
-          body: formData
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          message.innerHTML = `✅ Item posted successfully! Thank you.`;
-          message.className = "text-center mt-4 text-lg font-semibold text-green-400";
-          form.reset(); // Clear the form
-          fileChosen.textContent = 'Upload a Photo of the Item'; // Reset file input label
-        } else {
-          message.innerHTML = `❌ Failed to post item. ${data.message || 'Please check your input.'}`;
-          message.className = "text-center mt-4 text-lg font-semibold text-red-400";
-        }
-      } catch (error) {
-        message.innerHTML = "❌ An unexpected error occurred. Please try again.";
+      } else {
+        message.innerHTML = `❌ Failed to post item. ${data.message || 'Please check your input.'}`;
         message.className = "text-center mt-4 text-lg font-semibold text-red-400";
-        console.error(error);
-      } finally {
-        // Re-enable the button
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Post Item";
       }
-    });
-  </script>
+    } catch (error) {
+      console.error(error);
+      message.innerHTML = "❌ An unexpected error occurred. Please try again.";
+      message.className = "text-center mt-4 text-lg font-semibold text-red-400";
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Post Item";
+    }
+  });
+</script>
+
 
 </body>
 </html>
