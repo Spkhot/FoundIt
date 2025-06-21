@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Lost Item Request | FoundIt Hub</title>
+  <link rel="icon" href="logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-900 text-white min-h-screen">
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-center text-cyan-300 mb-8">Post a Lost Item Request</h1>
+    <form id="requestForm" class="space-y-5 bg-slate-800/50 p-6 rounded-xl border border-white/10">
+      <input type="text" name="productName" placeholder="Product Name" required class="w-full p-3 rounded bg-slate-700 border border-slate-600" />
+      <input type="text" name="location" placeholder="Last Seen Location (e.g., Library, Canteen)" required class="w-full p-3 rounded bg-slate-700 border border-slate-600" />
+      <textarea name="description" placeholder="Describe your lost item" required class="w-full p-3 rounded bg-slate-700 border border-slate-600"></textarea>
+      <input type="text" name="contact" placeholder="Your Contact Number" required class="w-full p-3 rounded bg-slate-700 border border-slate-600" />
+      <input type="text" name="reward" placeholder="Reward (Optional)" class="w-full p-3 rounded bg-slate-700 border border-slate-600" />
+      <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded">Submit Request</button>
+    </form>
+    <p id="responseMsg" class="text-center mt-4 text-green-400 hidden"></p>
+  </div>
+
+  <script>
+    document.getElementById("requestForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const res = await fetch("http://localhost:5000/api/requests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          document.getElementById("responseMsg").textContent = result.message;
+          document.getElementById("responseMsg").classList.remove("hidden");
+          e.target.reset();
+        } else {
+          alert(result.message || "Something went wrong.");
+        }
+      } catch (err) {
+        alert("Server error.");
+      }
+    });
+  </script>
+</body>
+</html>

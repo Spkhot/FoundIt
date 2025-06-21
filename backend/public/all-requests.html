@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Lost Item Requests | FoundIt Hub</title>
+  <link rel="icon" href="logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .animated-gradient {
+      background: linear-gradient(135deg, #6B21A8, #3B82F6, #EC4899, #F59E0B);
+      background-size: 400% 400%;
+      animation: backgroundPan 15s ease infinite;
+    }
+    @keyframes backgroundPan {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-white min-h-screen">
+
+  <!-- Background -->
+  <div class="animated-gradient fixed inset-0 -z-10"></div>
+
+  <div class="max-w-6xl mx-auto px-6 py-16">
+    <h1 class="text-4xl font-bold text-center text-cyan-300 mb-6">Lost Item Requests</h1>
+    <p class="text-slate-300 text-center mb-10">Here are all the lost item requests submitted by our community. If you found something, reach out!</p>
+
+    <div id="requestsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- JS will populate cards here -->
+    </div>
+
+    <p id="noRequestsMsg" class="text-center text-slate-400 mt-10 hidden">😢 No requests yet.</p>
+
+    <div class="text-center mt-16">
+      <a href="index.html" class="text-cyan-300 hover:underline">← Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById("requestsContainer");
+    const noMsg = document.getElementById("noRequestsMsg");
+
+    async function loadRequests() {
+      try {
+        const res = await fetch("http://localhost:5000/api/requests");
+        const data = await res.json();
+
+        if (!data.length) {
+          noMsg.classList.remove("hidden");
+          return;
+        }
+
+        data.forEach((req) => {
+          const card = document.createElement("div");
+          card.className = "bg-slate-800/50 backdrop-blur-lg rounded-xl p-5 border border-white/10 shadow-lg hover:shadow-cyan-500/20 transition-all";
+
+          card.innerHTML = `
+            <h2 class="text-xl font-bold text-cyan-300 mb-2">${req.itemName}</h2>
+            <p class="text-slate-400 text-sm mb-2">📍 <strong>Location:</strong> ${req.location}</p>
+            <p class="text-slate-400 text-sm mb-2">📞 <strong>Contact:</strong> ${req.contact}</p>
+            <p class="text-slate-300 text-sm mb-4">${req.description}</p>
+            ${req.reward ? `<p class="text-green-400 font-semibold">🎁 Reward: ${req.reward}</p>` : ""}
+          `;
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to fetch requests:", err);
+        noMsg.textContent = "⚠️ Could not load requests. Please try again later.";
+        noMsg.classList.remove("hidden");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadRequests);
+  </script>
+
+</body>
+</html>

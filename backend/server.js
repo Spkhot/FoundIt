@@ -23,6 +23,9 @@ app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 // Serve frontend files (e.g., index.html)
 app.use(express.static(path.join(__dirname, "public")));
 
+const requestRoutes = require("./routes/requestRoutes");
+app.use("/api/requests", requestRoutes);
+
 // API Routes
 const itemRoutes = require("./routes/itemRoutes");
 app.use("/api/items", itemRoutes);
