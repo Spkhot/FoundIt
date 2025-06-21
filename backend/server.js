@@ -18,18 +18,17 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("public/uploads"));
 
-// ✅ Serve frontend static files
+// ✅ Serve frontend static files (optional)
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 const itemRoutes = require("./routes/itemRoutes");
 app.use("/api/items", itemRoutes);
 
-// ✅ Fallback route for SPA (optional)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+// ✅ Optional fallback (Only if public/index.html exists)
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "index.html"));
+// });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
