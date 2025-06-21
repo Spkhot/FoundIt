@@ -1,40 +1,26 @@
-// const multer = require('multer');
-// const path = require('path');
-
-// // Storage config
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads/'); // Make sure this folder exists
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   }
-// });
-
-// const upload = multer({ storage });
-// module.exports = upload;
-
 const multer = require("multer");
 const path = require("path");
 
-// Configure storage
+// Configure storage destination and filename
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Ensure this folder exists
+    cb(null, "public/uploads/"); // Ensure this folder exists!
   },
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + "-" + file.originalname;
+    const ext = path.extname(file.originalname);
+    const baseName = path.basename(file.originalname, ext).replace(/\s+/g, '-');
+    const uniqueName = `${Date.now()}-${baseName}${ext}`;
     cb(null, uniqueName);
   },
 });
 
-// File filter (optional)
+// Optional file filter
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only image files are allowed!"), false);
+    cb(new Error("❌ Only JPEG, PNG, JPG, and WEBP image files are allowed."), false);
   }
 };
 

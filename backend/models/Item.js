@@ -1,19 +1,39 @@
 const mongoose = require("mongoose");
 
 const ItemSchema = new mongoose.Schema({
-  productName: String,
+  productName: {
+    type: String,
+    required: true,
+    trim: true
+  },
   category: {
     type: String,
-    enum: ["wallet", "id", "key", "documents", "shoes", "other"],
+    enum: ["wallet", "id", "key", "documents", "shoes", "electronics", "other"],
+    required: true
   },
-  location: String,
-  description: String,
-  contact: String,
-  image: String, // Filename or URL
+  location: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  contact: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  image: {
+    type: String,
+    required: true // since you're uploading images
+  },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model("Item", ItemSchema);
