@@ -4,6 +4,14 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, "public")));
+
+// Optional: Fallback route to load index.html for all unknown routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 dotenv.config();
 const app = express();
@@ -25,4 +33,6 @@ app.get("/", (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
