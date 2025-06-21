@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Lost Items | FoundIt Hub</title>
+    <link rel="icon" href="logo.png"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Background Animation */
+    @keyframes backgroundPan {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .animated-gradient {
+      background: linear-gradient(135deg, #6B21A8, #3B82F6, #EC4899, #F59E0B);
+      background-size: 400% 400%;
+      animation: backgroundPan 15s ease infinite;
+    }
+
+    /* Content and Card Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out forwards;
+      opacity: 0; /* Start hidden */
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    /* Apply staggered delays to children of the grid */
+    #itemsContainer > * {
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-white">
+
+  <!-- Animated Background -->
+  <div class="animated-gradient fixed top-0 left-0 w-full h-full z-0"></div>
+
+  <!-- Content Wrapper -->
+  <div class="relative z-10 min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-black/20 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
+      <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="index.html" class="text-2xl font-bold tracking-wider hover:text-cyan-300 transition-colors">
+          <span class="text-cyan-400">FoundIt</span> Hub
+        </a>
+        <div class="flex items-center space-x-4">
+          <a href="post-found.html" class="text-sm font-semibold py-2 px-4 rounded-full hover:bg-white/10 transition-colors">
+            Found Something?
+          </a>
+          <a href="index.html" class="bg-white/90 text-slate-900 font-semibold py-2 px-5 rounded-full hover:bg-cyan-300 transition-all duration-300 shadow-lg transform hover:scale-105">
+            Home
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto w-full px-6 py-12 flex-grow">
+      
+      <div class="text-center mb-10">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white animate-fadeInUp">Search for Lost Items</h1>
+        <p class="text-slate-300 mt-3 animate-fadeInUp delay-1">Use the filters below to narrow your search.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="bg-black/20 backdrop-blur-lg border border-white/10 p-6 rounded-xl shadow-lg mb-10 flex flex-col md:flex-row items-center justify-between gap-4 animate-fadeInUp delay-2">
+        <input id="searchInput" type="text" placeholder="Search by name, item, or location..." class="w-full md:w-1/2 p-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" />
+        
+        <select id="categorySelect" class="w-full md:w-1/3 p-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition">
+          <option value="">All Categories</option>
+          <option value="wallet">Wallet</option>
+          <option value="id">ID Card</option>
+          <option value="key">Keys</option>
+          <option value="documents">Documents</option>
+          <option value="shoes">Shoes</option>
+          <option value="electronics">Electronics</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fadeInUp delay-3">
+          <a href="post-found.html" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 hover:shadow-xl duration-300">
+            I Found Something
+          </a>
+          <a href="index.html" class="bg-white/10 border border-white/20 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 hover:bg-white/20 duration-300">
+            Back to Home
+          </a>
+      </div>
+
+      <!-- Items List -->
+      <div id="itemsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- JS will populate this -->
+      </div>
+      
+    </main>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const itemsContainer = document.getElementById('itemsContainer');
+
+    async function fetchItems() {
+      try {
+        // This fetch URL should point to your backend API
+        const res = await fetch('http://localhost:5000/api/items');
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const items = await res.json();
+        return items;
+      } catch (err) {
+        console.error("Failed to fetch items:", err);
+        itemsContainer.innerHTML = "<p class='text-red-400 text-center col-span-full'>Could not load items. Is the server running?</p>";
+        return [];
+      }
+    }
+
+    function renderItems(items) {
+      itemsContainer.innerHTML = "";
+
+      if (items.length === 0) {
+        itemsContainer.innerHTML = "<p class='text-slate-400 text-center col-span-full'>No items match your search.</p>";
+        return;
+      }
+      
+      // Add staggered animation delay
+      items.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "group bg-slate-800/50 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-cyan-500/20 hover:-translate-y-2";
+        card.style.animationDelay = `${index * 100}ms`;
+
+        card.innerHTML = `
+          <div class="overflow-hidden">
+            <img src="http://localhost:5000/uploads/${item.image}" alt="${item.productName}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
+          </div>
+          <div class="p-5">
+            <h3 class="text-2xl font-bold text-cyan-300 truncate">${item.productName}</h3>
+            <p class="text-sm text-slate-400 mt-1 mb-4 truncate">Found at: ${item.location}</p>
+            <a href="item-details.html?id=${item._id}" class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white font-semibold px-5 py-2 rounded-full text-sm transition-colors duration-300">
+              View Details →
+            </a>
+          </div>
+        `;
+        itemsContainer.appendChild(card);
+      });
+    }
+
+    function applyFilters(allItems) {
+      const searchText = searchInput.value.toLowerCase();
+      const selectedCategory = categorySelect.value;
+
+      const filtered = allItems.filter(item => {
+        const matchText = item.productName.toLowerCase().includes(searchText) ||
+                          item.location.toLowerCase().includes(searchText);
+        const matchCategory = selectedCategory ? item.category === selectedCategory : true;
+        return matchText && matchCategory;
+      });
+
+      renderItems(filtered);
+    }
+
+    // Initialize
+    let allItems = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchItems().then(data => {
+            allItems = data;
+            renderItems(allItems);
+        });
+
+        searchInput.addEventListener("input", () => applyFilters(allItems));
+        categorySelect.addEventListener("change", () => applyFilters(allItems));
+    });
+  </script>
+</body>
+</html>
