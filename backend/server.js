@@ -2,12 +2,13 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 dotenv.config();
 const app = express();
 connectDB();
-
+mongoose.connect(process.env.MONGO_URI)
 // Middleware
 app.use(cors());
 app.use(express.json());
