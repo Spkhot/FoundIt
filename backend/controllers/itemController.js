@@ -5,21 +5,29 @@ exports.createItem = async (req, res) => {
     const { productName, category, location, description, contact } = req.body;
     const image = req.file?.filename;
 
+    // Validation
+    if (!productName || !category || !location || !description || !contact || !image) {
+      return res.status(400).json({ message: "All fields including image are required." });
+    }
+
     const newItem = new Item({
       productName,
       category,
       location,
       description,
       contact,
-      image,
+      image
     });
 
     await newItem.save();
-    res.status(201).json({ message: "Item posted successfully", item: newItem });
-  } catch (err) {
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(201).json({ message: "Item posted successfully." });
+
+  } catch (error) {
+    console.error("Error in createItem:", error.message);
+    res.status(500).json({ message: "Server error while posting item." });
   }
 };
+
 
 exports.getItems = async (req, res) => {
   const { category } = req.query;
