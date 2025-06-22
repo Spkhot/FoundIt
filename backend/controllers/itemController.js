@@ -1,41 +1,41 @@
+// controllers/itemController.js
 const Item = require("../models/Item");
 const cloudinary = require("../utils/cloudinary");
-const fs = require("fs"); // ✅ Needed to delete local file
+const fs = require("fs");
 
-// ✅ POST /api/items
 exports.createItem = async (req, res) => {
   try {
-    const { productName, category, location, description, contact } = req.body;
+    console.log("🛬 Received POST /api/items", "file:", req.file, "body:", req.body);
 
     if (!req.file) {
-      return res.status(400).json({ message: "Image is required." });
+      return res.status(400).json({ message: "Image file is required." });
     }
-
-    console.log("📸 Uploading image to Cloudinary:", req.file.path);
 
     const cloudResult = await cloudinary.uploader.upload(req.file.path, {
       folder: "foundit_items",
     });
+    console.log("✅ Cloudinary uploaded:", cloudResult.secure_url);
 
-    const imageUrl = cloudResult.secure_url;
+    fs.unlinkSync(req.file.path);
 
     const newItem = new Item({
-      productName,
-      category,
-      location,
-      description,
-      contact,
-      image: imageUrl, // ✅ make sure you’re using correct field here
+      productName: req.body.productName,
+      category: req.body.category,
+      location: req.body.location,
+      description: req.body.description,
+      contact: req.body.contact,
+      image: cloudResult.secure_url
     });
 
     await newItem.save();
-    res.status(201).json({ message: "Item posted successfully.", item: newItem });
+    return res.status(201).json({ message: "Item posted successfully", item: newItem });
 
   } catch (error) {
-    console.error("❌ FULL ERROR STACK:", error);
-    res.status(500).json({ message: "Server error while posting item." });
+    console.error("🔥 FULL ERROR in createItem():", error);
+    return res.status(500).json({ message: "Server error while posting item." });
   }
 };
+
 
 
 // ✅ GET /api/items?category=
