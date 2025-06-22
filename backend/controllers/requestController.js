@@ -2,15 +2,25 @@ const Request = require("../models/Request");
 
 exports.createRequest = async (req, res) => {
   try {
-    const { name, item, location, description, contact, reward } = req.body;
+    const { productName, location, description, contact, category, reward } = req.body;
 
-    if (!name || !item || !location || !description || !contact) {
-      return res.status(400).json({ message: "All required fields must be filled." });
+    // Validate required fields
+    if (!productName || !location || !contact || !category) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const newRequest = new Request({ name, item, location, description, contact, reward });
-    await newRequest.save();
-    res.status(201).json({ message: "Request submitted successfully." });
+    const request = new Request({
+      productName,
+      location,
+      description,
+      contact,
+      category,
+      reward
+    });
+
+    await request.save();
+    res.status(201).json({ message: "Request submitted successfully", request });
+
   } catch (error) {
     console.error("Create request error:", error.message);
     res.status(500).json({ message: "Server error." });
@@ -18,14 +28,21 @@ exports.createRequest = async (req, res) => {
 };
 
 exports.getRequests = async (req, res) => {
-  const requests = await Request.find().sort({ createdAt: -1 });
-  res.json(requests);
+  try {
+    const requests = await Request.find().sort({ createdAt: -1 });
+    res.json(requests);
+  } catch (error) {
+    console.error("Get requests error:", error.message);
+    res.status(500).json({ message: "Server error." });
+  }
 };
 
 exports.deleteRequest = async (req, res) => {
   try {
     const request = await Request.findByIdAndDelete(req.params.id);
-    if (!request) return res.status(404).json({ message: "Request not found." });
+    if (!request) {
+      return res.status(404).json({ message: "Request not found." });
+    }
     res.json({ message: "Request deleted successfully." });
   } catch (err) {
     console.error("Delete error:", err.message);
