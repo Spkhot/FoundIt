@@ -5,14 +5,13 @@ const fs = require("fs");
 // Create new item
 exports.createItem = async (req, res) => {
   try {
-    console.log("🛬 POST /api/items body:", req.body);
+    console.log("🧾 Received fields:", req.body);
+    console.log("🖼️ Received file:", req.file);
 
-    // 🛑 Prevent crash if no image is uploaded
     if (!req.file) {
-      return res.status(400).json({ message: "No image file uploaded" });
+      return res.status(400).json({ message: "No image uploaded" });
     }
 
-    // ✅ Upload to Cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "found-items",
     });
@@ -28,15 +27,15 @@ exports.createItem = async (req, res) => {
 
     await newItem.save();
 
-    // ✅ Remove temp image from server
-    fs.unlinkSync(req.file.path);
+    fs.unlinkSync(req.file.path); // remove local file
 
     res.status(201).json({ message: "Item posted successfully", item: newItem });
   } catch (error) {
-    console.error("❌ Error creating item:", error.message);
+    console.error("❌ Error creating item:", error);
     res.status(500).json({ message: "Server error while creating item" });
   }
 };
+
 
 // ✅ GET /api/items?category=
 exports.getItems = async (req, res) => {
