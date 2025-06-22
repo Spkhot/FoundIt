@@ -118,7 +118,7 @@
   const form = document.getElementById('foundForm');
   const message = document.getElementById('message');
   const submitBtn = document.getElementById('submitBtn');
-  const imageUpload = document.getElementById('imageUpload');
+  //const imageUpload = document.getElementById('imageUpload');
   const fileChosen = document.getElementById('file-chosen');
 
   // File input label update
@@ -129,8 +129,13 @@
   });
 
   // Handle form submission
-  form.addEventListener('submit', async (e) => {
+ const imageUpload = document.getElementById("imageUpload");
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  if (imageUpload.files.length === 0) {
+    return showMessage("❌ Please select an image.", "text-red-400");
+  }
 
   const formData = new FormData(form);
 
