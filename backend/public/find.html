@@ -120,7 +120,7 @@
  <script>
   const BASE_URL = location.hostname === "localhost"
     ? "http://localhost:5000"
-    : "https://foundit-imky.onrender.com"; // ✅ Your live Render backend URL
+    : "https://foundit-imky.onrender.com";
 
   const searchInput = document.getElementById('searchInput');
   const categorySelect = document.getElementById('categorySelect');
@@ -139,38 +139,37 @@
     }
   }
 
-function renderItems(items) {
-  itemsContainer.innerHTML = "";
+  function renderItems(items) {
+    itemsContainer.innerHTML = "";
 
-  if (items.length === 0) {
-    itemsContainer.innerHTML = "<p class='text-slate-400 text-center col-span-full'>No items match your search.</p>";
-    return;
+    if (items.length === 0) {
+      itemsContainer.innerHTML = "<p class='text-slate-400 text-center col-span-full'>No items match your search.</p>";
+      return;
+    }
+
+    items.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "group bg-slate-800/50 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-cyan-500/20 hover:-translate-y-2";
+      card.style.animationDelay = `${index * 100}ms`;
+
+      // ✅ Use Cloudinary image from item.image
+      const imgSrc = item.image;
+
+      card.innerHTML = `
+        <div class="overflow-hidden">
+          <img src="${imgSrc}" alt="${item.productName}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
+        </div>
+        <div class="p-5">
+          <h3 class="text-2xl font-bold text-cyan-300 truncate">${item.productName}</h3>
+          <p class="text-sm text-slate-400 mt-1 mb-4 truncate">Found at: ${item.location}</p>
+          <a href="item-details.html?id=${item._id}" class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white font-semibold px-5 py-2 rounded-full text-sm transition-colors duration-300">
+            View Details →
+          </a>
+        </div>
+      `;
+      itemsContainer.appendChild(card);
+    });
   }
-
-  items.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "group bg-slate-800/50 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-cyan-500/20 hover:-translate-y-2";
-    card.style.animationDelay = `${index * 100}ms`;
-
-    // ✅ Use Cloudinary image URL
-    const imgSrc = item.imageUrl || `${BASE_URL}/uploads/${item.image}`;
-
-    card.innerHTML = `
-      <div class="overflow-hidden">
-        <img src="${imgSrc}" alt="${item.productName}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
-      </div>
-      <div class="p-5">
-        <h3 class="text-2xl font-bold text-cyan-300 truncate">${item.productName}</h3>
-        <p class="text-sm text-slate-400 mt-1 mb-4 truncate">Found at: ${item.location}</p>
-        <a href="item-details.html?id=${item._id}" class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white font-semibold px-5 py-2 rounded-full text-sm transition-colors duration-300">
-          View Details →
-        </a>
-      </div>
-    `;
-    itemsContainer.appendChild(card);
-  });
-}
-
 
   function applyFilters(allItems) {
     const searchText = searchInput.value.toLowerCase();
@@ -198,6 +197,7 @@ function renderItems(items) {
     categorySelect.addEventListener("change", () => applyFilters(allItems));
   });
 </script>
+
 
 </body>
 </html>
