@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const itemController = require("../controllers/itemController");
-const upload = require("../middlewares/uploadMiddleware");
+//const upload = require("../middlewares/uploadMiddleware");
 const Item = require('../models/Item'); // ✅ Make sure path is correct
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // for temp storage
 
-router.post("/", upload.single("image"), itemController.createItem);
+router.post('/items', upload.single('image'), itemController.createItem);
+
+
+// router.post("/", upload.single("image"), itemController.createItem);
 router.get("/", itemController.getItems);
 router.get("/:id", itemController.getItemById);
 // DELETE /api/items/:id
