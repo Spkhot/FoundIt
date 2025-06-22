@@ -1,15 +1,20 @@
 const Item = require("../models/Item");
+const cloudinary = require("../utils/cloudinary");
 
-// ✅ POST /api/items
 exports.createItem = async (req, res) => {
   try {
     const { productName, category, location, description, contact } = req.body;
-    const image = req.file?.filename;
 
-    // Basic Validation
-    if (!productName || !category || !location || !description || !contact || !image) {
-      return res.status(400).json({ message: "All fields including image are required." });
+    if (!req.file) {
+      return res.status(400).json({ message: "Image is required." });
     }
+
+    // ✅ Upload image to Cloudinary
+    const cloudResult = await cloudinary.uploader.upload(req.file.path, {
+      folder: "foundit_items", // optional: puts images in a named folder on Cloudinary
+    });
+
+    const imageUrl = cloudResult.secure_url;
 
     const newItem = new Item({
       productName,
@@ -17,7 +22,7 @@ exports.createItem = async (req, res) => {
       location,
       description,
       contact,
-      image
+      imageUrl, // ✅ Save Cloudinary URL
     });
 
     await newItem.save();
@@ -28,6 +33,7 @@ exports.createItem = async (req, res) => {
     res.status(500).json({ message: "Server error while posting item." });
   }
 };
+
 
 // ✅ GET /api/items?category=
 exports.getItems = async (req, res) => {
