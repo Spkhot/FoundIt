@@ -1,23 +1,16 @@
-// controllers/itemController.js
-
 const Item = require("../models/Item");
 const cloudinary = require("../utils/cloudinary");
 const fs = require("fs");
 
+// Create new item
 exports.createItem = async (req, res) => {
   try {
-    console.log("🛬 Received POST /api/items", "file:", req.file, "body:", req.body);
-     
-    if (!req.file) {
-      return res.status(400).json({ message: "Image file is required." });
-    }
+    console.log("🛬 POST /api/items body:", req.body);
 
-    const cloudResult = await cloudinary.uploader.upload(req.file.path, {
-      folder: "foundit_items",
+    // Upload image to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "found-items",
     });
-    console.log("✅ Cloudinary uploaded:", cloudResult.secure_url);
-
-    fs.unlinkSync(req.file.path);
 
     const newItem = new Item({
       productName: req.body.productName,
@@ -25,17 +18,21 @@ exports.createItem = async (req, res) => {
       location: req.body.location,
       description: req.body.description,
       contact: req.body.contact,
-      image: cloudResult.secure_url
+      image: result.secure_url, // Save cloudinary image URL
     });
 
     await newItem.save();
-    return res.status(201).json({ message: "Item posted successfully", item: newItem });
 
+    // Remove local file after uploading to Cloudinary
+    fs.unlinkSync(req.file.path);
+
+    res.status(201).json({ message: "Item posted successfully", item: newItem });
   } catch (error) {
-    console.error("🔥 FULL ERROR in createItem():", error);
-    return res.status(500).json({ message: "Server error while posting item." });
+    console.error("❌ Error creating item:", error);
+    res.status(500).json({ message: "Server error while creating item" });
   }
 };
+
 
 
 
