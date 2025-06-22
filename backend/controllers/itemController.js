@@ -11,13 +11,11 @@ exports.createItem = async (req, res) => {
       return res.status(400).json({ message: "Image is required." });
     }
 
-    // ✅ Upload image to Cloudinary
+    console.log("📸 Uploading image to Cloudinary:", req.file.path);
+
     const cloudResult = await cloudinary.uploader.upload(req.file.path, {
       folder: "foundit_items",
     });
-
-    // ✅ Delete local file after upload
-    fs.unlinkSync(req.file.path);
 
     const imageUrl = cloudResult.secure_url;
 
@@ -27,17 +25,18 @@ exports.createItem = async (req, res) => {
       location,
       description,
       contact,
-      imageUrl,
+      image: imageUrl, // ✅ make sure you’re using correct field here
     });
 
     await newItem.save();
     res.status(201).json({ message: "Item posted successfully.", item: newItem });
 
   } catch (error) {
-    console.error("❌ Error in createItem:", error.message);
+    console.error("❌ FULL ERROR STACK:", error);
     res.status(500).json({ message: "Server error while posting item." });
   }
 };
+
 
 // ✅ GET /api/items?category=
 exports.getItems = async (req, res) => {
