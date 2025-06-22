@@ -6,79 +6,117 @@
   <title>Post Lost Item Request | FoundIt Hub</title>
   <link rel="icon" href="logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
     }
-
+    @keyframes backgroundPan {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .animated-gradient {
+      background: linear-gradient(135deg, #6B21A8, #3B82F6, #EC4899, #F59E0B);
+      background-size: 400% 400%;
+      animation: backgroundPan 15s ease infinite;
+    }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .animate-fadeInUp {
       animation: fadeInUp 0.6s ease-out forwards;
-      opacity: 0;
+      opacity: 0; /* Start hidden */
     }
   </style>
 </head>
 <body class="bg-slate-900 text-white">
+  
+  <!-- Animated Background -->
+  <div class="animated-gradient fixed top-0 left-0 w-full h-full z-0"></div>
 
-  <div class="max-w-2xl mx-auto py-12 px-6">
-    <h1 class="text-3xl md:text-4xl font-bold text-center text-cyan-400 mb-8 animate-fadeInUp">
-      Lost Something? Post a Request
-    </h1>
+  <!-- Content Wrapper -->
+  <div class="relative z-10 min-h-screen flex flex-col">
+    <header class="bg-black/20 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
+      <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="index.html" class="text-2xl font-bold tracking-wider hover:text-cyan-300 transition-colors">
+          <span class="text-cyan-400">FoundIt</span> Hub
+        </a>
+        <a href="index.html" class="bg-white/90 text-slate-900 font-semibold py-2 px-5 rounded-full hover:bg-cyan-300 transition-all duration-300 shadow-lg transform hover:scale-105">
+          Home
+        </a>
+      </nav>
+    </header>
 
-    <form id="requestForm" class="bg-slate-800/50 backdrop-blur-md border border-white/10 p-6 rounded-xl shadow-xl space-y-6 animate-fadeInUp delay-1">
-      
-      <div>
-        <label class="block mb-1 text-sm text-slate-300">Product Name <span class="text-red-500">*</span></label>
-        <input type="text" name="productName" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
+    <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6">
+      <div class="w-full max-w-2xl">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white animate-fadeInUp">
+            Lost Something?
+          </h1>
+          <p class="text-slate-300 mt-2 animate-fadeInUp" style="animation-delay: 100ms;">
+            Post a request and let our community help you find it.
+          </p>
+        </div>
+        
+        <div class="text-center mb-8 animate-fadeInUp" style="animation-delay: 200ms;">
+          <a href="all-requests.html" class="bg-white/10 border border-white/20 text-white font-semibold py-2 px-6 rounded-full transition-all transform hover:scale-105 hover:bg-white/20 duration-300">
+            View All Requests
+          </a>
+        </div>
+
+        <form id="requestForm" class="bg-slate-800/50 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl space-y-5 animate-fadeInUp" style="animation-delay: 300ms;">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block mb-1 text-sm font-medium text-slate-300">Item Name <span class="text-red-500">*</span></label>
+              <input type="text" name="productName" required class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="e.g., Black Leather Wallet">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm font-medium text-slate-300">Category <span class="text-red-500">*</span></label>
+              <select name="category" required class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition">
+                <option value="" disabled selected>Select a Category</option>
+                <option value="wallet">Wallet</option>
+                <option value="id">ID</option>
+                <option value="documents">Documents</option>
+                <option value="shoes">Shoes</option>
+                <option value="electronics">Electronics</option>
+                <option value="key">Keys</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block mb-1 text-sm font-medium text-slate-300">Last Known Location <span class="text-red-500">*</span></label>
+            <input type="text" name="location" required class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="e.g., Central Park, near the fountain">
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm font-medium text-slate-300">Description</label>
+            <textarea name="description" rows="4" class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="Add any details like brand, color, or unique marks..."></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block mb-1 text-sm font-medium text-slate-300">Contact Number <span class="text-red-500">*</span></label>
+              <input type="tel" name="contact" required class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="Your phone or email">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm font-medium text-slate-300">Reward (Optional)</label>
+              <input type="text" name="reward" class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="e.g., 50₹ or Coffee😊">
+            </div>
+          </div>
+
+          <div id="message" class="text-center font-semibold pt-2 hidden"></div>
+
+          <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 px-6 py-3 rounded-lg text-white font-bold text-lg transition-opacity transform hover:scale-[1.02] duration-300">
+            Submit Request
+          </button>
+        </form>
       </div>
-
-      <div>
-        <label class="block mb-1 text-sm text-slate-300">Category <span class="text-red-500">*</span></label>
-        <select name="category" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
-          <option value="">Select Category</option>
-          <option value="wallet">Wallet</option>
-          <option value="id">ID</option>
-          <option value="documents">Documents</option>
-          <option value="shoes">Shoes</option>
-          <option value="electronics">Electronics</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block mb-1 text-sm text-slate-300">Location <span class="text-red-500">*</span></label>
-        <input type="text" name="location" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
-      </div>
-
-      <div>
-        <label class="block mb-1 text-sm text-slate-300">Description</label>
-        <textarea name="description" rows="4" class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600"></textarea>
-      </div>
-
-      <div>
-        <label class="block mb-1 text-sm text-slate-300">Contact Number <span class="text-red-500">*</span></label>
-        <input type="tel" name="contact" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
-      </div>
-
-      <div>
-        <label class="block mb-1 text-sm text-slate-300">Reward (Optional)</label>
-        <input type="text" name="reward" placeholder="Optional reward if any" class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
-      </div>
-
-      <div class="flex justify-between mt-6">
-        <a href="index.html" class="px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition text-white">← Back</a>
-        <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 px-6 py-2 rounded-full text-white font-semibold transition">
-          Submit Request
-        </button>
-      </div>
-    </form>
-
-    <p id="message" class="text-center text-green-400 mt-4 hidden"></p>
+    </main>
   </div>
 
   <script>
@@ -88,11 +126,17 @@
 
     const form = document.getElementById('requestForm');
     const message = document.getElementById('message');
+    const submitBtn = document.getElementById('submitBtn');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
+
+      // Provide immediate feedback
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      message.classList.add('hidden');
 
       try {
         const res = await fetch(`${BASE_URL}/api/requests`, {
@@ -101,19 +145,23 @@
           body: JSON.stringify(data),
         });
 
-        if (!res.ok) throw new Error("Failed to post request");
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.message || "Failed to post request");
+        }
 
         form.reset();
-        message.textContent = "✅ Lost item request posted successfully!";
-        message.classList.remove("hidden");
-        message.classList.remove("text-red-400");
-        message.classList.add("text-green-400");
+        message.textContent = "✅ Your request has been posted successfully!";
+        message.className = 'text-center font-semibold pt-2 text-green-400';
 
       } catch (err) {
-        message.textContent = "❌ Failed to post request. Try again.";
-        message.classList.remove("hidden");
-        message.classList.remove("text-green-400");
-        message.classList.add("text-red-400");
+        message.textContent = `❌ ${err.message}`;
+        message.className = 'text-center font-semibold pt-2 text-red-400';
+      } finally {
+        // Re-enable the button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Request';
+        message.classList.remove('hidden');
       }
     });
   </script>
