@@ -1,6 +1,8 @@
 const Item = require("../models/Item");
 const cloudinary = require("../utils/cloudinary");
+const fs = require("fs"); // ✅ Needed to delete local file
 
+// ✅ POST /api/items
 exports.createItem = async (req, res) => {
   try {
     const { productName, category, location, description, contact } = req.body;
@@ -11,8 +13,11 @@ exports.createItem = async (req, res) => {
 
     // ✅ Upload image to Cloudinary
     const cloudResult = await cloudinary.uploader.upload(req.file.path, {
-      folder: "foundit_items", // optional: puts images in a named folder on Cloudinary
+      folder: "foundit_items",
     });
+
+    // ✅ Delete local file after upload
+    fs.unlinkSync(req.file.path);
 
     const imageUrl = cloudResult.secure_url;
 
@@ -22,7 +27,7 @@ exports.createItem = async (req, res) => {
       location,
       description,
       contact,
-      imageUrl, // ✅ Save Cloudinary URL
+      imageUrl,
     });
 
     await newItem.save();
@@ -33,7 +38,6 @@ exports.createItem = async (req, res) => {
     res.status(500).json({ message: "Server error while posting item." });
   }
 };
-
 
 // ✅ GET /api/items?category=
 exports.getItems = async (req, res) => {
