@@ -110,77 +110,73 @@
     </div>
   </div>
 
-  <script>
-  const BASE_URL = location.hostname === "localhost"
-    ? "http://localhost:10000"
-    : "https://foundit-imky.onrender.com"; // ✅ Your Render backend URL
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const BASE_URL = location.hostname === "localhost"
+      ? "http://localhost:10000"
+      : "https://foundit-imky.onrender.com";
 
-  const form = document.getElementById('foundForm');
-  const message = document.getElementById('message');
-  const submitBtn = document.getElementById('submitBtn');
-  //const imageUpload = document.getElementById('imageUpload');
-  const fileChosen = document.getElementById('file-chosen');
+    const form = document.getElementById('foundForm');
+    const message = document.getElementById('message');
+    const submitBtn = document.getElementById('submitBtn');
+    const imageUpload = document.getElementById('imageUpload');
+    const fileChosen = document.getElementById('file-chosen');
 
-  // File input label update
-  imageUpload.addEventListener('change', () => {
-    fileChosen.textContent = imageUpload.files.length > 0
-      ? imageUpload.files[0].name
-      : 'Upload a Photo of the Item';
-  });
-
-  // Handle form submission
- const imageUpload = document.getElementById("imageUpload");
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  if (imageUpload.files.length === 0) {
-    return showMessage("❌ Please select an image.", "text-red-400");
-  }
-
-  const formData = new FormData(form);
-
-  message.textContent = "Submitting...";
-  message.className = "text-center mt-4 text-lg font-semibold text-yellow-400";
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Posting...";
-
-  try {
-    const res = await fetch(`${BASE_URL}/api/items`, {
-      method: 'POST',
-      body: formData
+    // ✅ File input label update
+    imageUpload.addEventListener('change', () => {
+      fileChosen.textContent = imageUpload.files.length > 0
+        ? imageUpload.files[0].name
+        : 'Upload a Photo of the Item';
     });
 
-    const contentType = res.headers.get("content-type");
-    let data;
+    // ✅ Handle form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
 
-    if (contentType && contentType.includes("application/json")) {
-      data = await res.json();
-    } else {
-      const text = await res.text();
-      throw new Error(`Server error (HTML): ${text}`);
-    }
+      message.textContent = "Submitting...";
+      message.className = "text-center mt-4 text-lg font-semibold text-yellow-400";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Posting...";
 
-    if (res.ok) {
-      message.innerHTML = `✅ Item posted successfully! Thank you.`;
-      message.className = "text-center mt-4 text-lg font-semibold text-green-400";
-      form.reset();
-      fileChosen.textContent = 'Upload a Photo of the Item';
-    } else {
-      message.innerHTML = `❌ Failed to post item. ${data.message || 'Please check your input.'}`;
-      message.className = "text-center mt-4 text-lg font-semibold text-red-400";
-    }
+      try {
+        const res = await fetch(`${BASE_URL}/api/items`, {
+          method: 'POST',
+          body: formData
+        });
 
-  } catch (error) {
-    console.error("❌ Submission error:", error.message);
-    message.innerHTML = `❌ ${error.message.includes('<') ? 'Server returned invalid HTML instead of JSON.' : error.message}`;
-    message.className = "text-center mt-4 text-lg font-semibold text-red-400";
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Post Item";
-  }
-});
+        const contentType = res.headers.get("content-type");
+        let data;
 
+        if (contentType && contentType.includes("application/json")) {
+          data = await res.json();
+        } else {
+          const text = await res.text();
+          throw new Error(`Server error (HTML): ${text}`);
+        }
+
+        if (res.ok) {
+          message.innerHTML = `✅ Item posted successfully! Thank you.`;
+          message.className = "text-center mt-4 text-lg font-semibold text-green-400";
+          form.reset();
+          fileChosen.textContent = 'Upload a Photo of the Item';
+        } else {
+          message.innerHTML = `❌ Failed to post item. ${data.message || 'Please check your input.'}`;
+          message.className = "text-center mt-4 text-lg font-semibold text-red-400";
+        }
+
+      } catch (error) {
+        console.error("❌ Submission error:", error.message);
+        message.innerHTML = `❌ ${error.message.includes('<') ? 'Server returned invalid HTML instead of JSON.' : error.message}`;
+        message.className = "text-center mt-4 text-lg font-semibold text-red-400";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Post Item";
+      }
+    });
+  });
 </script>
+
 
 
 </body>
