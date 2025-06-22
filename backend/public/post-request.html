@@ -16,6 +16,7 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
     .animate-fadeInUp {
       animation: fadeInUp 0.6s ease-out forwards;
       opacity: 0;
@@ -30,29 +31,43 @@
     </h1>
 
     <form id="requestForm" class="bg-slate-800/50 backdrop-blur-md border border-white/10 p-6 rounded-xl shadow-xl space-y-6 animate-fadeInUp delay-1">
+      
       <div>
-        <label class="block mb-1 text-sm text-slate-300">Item Name<span class="text-red-500">*</span></label>
-        <input type="text" name="item" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <label class="block mb-1 text-sm text-slate-300">Product Name <span class="text-red-500">*</span></label>
+        <input type="text" name="productName" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
       </div>
 
       <div>
-        <label class="block mb-1 text-sm text-slate-300">Where You Lost It?<span class="text-red-500">*</span></label>
-        <input type="text" name="location" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <label class="block mb-1 text-sm text-slate-300">Category <span class="text-red-500">*</span></label>
+        <select name="category" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
+          <option value="">Select Category</option>
+          <option value="wallet">Wallet</option>
+          <option value="id">ID</option>
+          <option value="documents">Documents</option>
+          <option value="shoes">Shoes</option>
+          <option value="electronics">Electronics</option>
+          <option value="other">Other</option>
+        </select>
       </div>
 
       <div>
-        <label class="block mb-1 text-sm text-slate-300">Item Description<span class="text-red-500">*</span></label>
-        <textarea name="description" rows="4" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400"></textarea>
+        <label class="block mb-1 text-sm text-slate-300">Location <span class="text-red-500">*</span></label>
+        <input type="text" name="location" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
       </div>
 
       <div>
-        <label class="block mb-1 text-sm text-slate-300">Your Contact Number<span class="text-red-500">*</span></label>
-        <input type="tel" name="contact" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <label class="block mb-1 text-sm text-slate-300">Description</label>
+        <textarea name="description" rows="4" class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600"></textarea>
+      </div>
+
+      <div>
+        <label class="block mb-1 text-sm text-slate-300">Contact Number <span class="text-red-500">*</span></label>
+        <input type="tel" name="contact" required class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
       </div>
 
       <div>
         <label class="block mb-1 text-sm text-slate-300">Reward (Optional)</label>
-        <input type="text" name="reward" placeholder="Optional reward if any" class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+        <input type="text" name="reward" placeholder="Optional reward if any" class="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600">
       </div>
 
       <div class="flex justify-between mt-6">
@@ -91,12 +106,14 @@
         form.reset();
         message.textContent = "✅ Lost item request posted successfully!";
         message.classList.remove("hidden");
-        message.classList.add("animate-fadeInUp");
+        message.classList.remove("text-red-400");
+        message.classList.add("text-green-400");
 
       } catch (err) {
         message.textContent = "❌ Failed to post request. Try again.";
         message.classList.remove("hidden");
-        message.classList.add("text-red-400", "animate-fadeInUp");
+        message.classList.remove("text-green-400");
+        message.classList.add("text-red-400");
       }
     });
   </script>

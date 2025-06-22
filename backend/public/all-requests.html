@@ -18,28 +18,44 @@
     }
 
     .animate-fadeInUp {
-      animation: fadeInUp 0.6s ease-out forwards;
-      opacity: 0;
-    }
-
-    #requestsContainer > div {
       animation: fadeInUp 0.5s ease-out forwards;
+      opacity: 0;
     }
   </style>
 </head>
-<body class="bg-slate-900 text-white">
+<body class="bg-slate-900 text-white min-h-screen">
 
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h1 class="text-3xl md:text-4xl font-bold text-center text-cyan-400 mb-10 animate-fadeInUp">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-3xl md:text-4xl font-bold text-center text-cyan-400 mb-6 animate-fadeInUp">
       All Lost Item Requests
     </h1>
 
-    <div id="requestsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- Requests will be populated here -->
+    <!-- Filters and Count -->
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+      <div class="flex gap-4 flex-wrap">
+        <select id="categoryFilter" class="bg-slate-800 border border-slate-600 text-white px-4 py-2 rounded-lg">
+          <option value="">All Categories</option>
+          <option value="wallet">Wallet</option>
+          <option value="electronics">Electronics</option>
+          <option value="documents">Documents</option>
+          <option value="id">ID Card</option>
+          <option value="key">Key</option>
+          <option value="other">Other</option>
+        </select>
+
+        <input type="text" id="locationFilter" placeholder="Filter by Location"
+          class="bg-slate-800 border border-slate-600 text-white px-4 py-2 rounded-lg" />
+      </div>
+
+      <p id="countDisplay" class="text-slate-400 text-sm">Showing 0 requests</p>
     </div>
 
+    <!-- Request Cards -->
+    <div id="requestsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+
+    <!-- Empty State -->
     <div id="emptyState" class="text-center text-slate-400 mt-12 hidden">
-      No lost item requests found.
+      No matching requests found.
     </div>
   </div>
 
@@ -50,42 +66,71 @@
 
     const container = document.getElementById('requestsContainer');
     const emptyState = document.getElementById('emptyState');
+    const countDisplay = document.getElementById('countDisplay');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const locationFilter = document.getElementById('locationFilter');
+
+    let allRequests = [];
 
     async function loadRequests() {
       try {
         const res = await fetch(`${BASE_URL}/api/requests`);
-        const requests = await res.json();
+        const data = await res.json();
 
-        if (!Array.isArray(requests) || requests.length === 0) {
-          emptyState.classList.remove('hidden');
-          return;
-        }
-
-        requests.forEach((req, index) => {
-          const div = document.createElement('div');
-          div.className = "bg-slate-800/50 border border-white/10 rounded-xl p-6 shadow-lg space-y-3";
-          div.style.animationDelay = `${index * 100}ms`;
-
-          div.innerHTML = `
-            ${req.category ? `<span class="inline-block bg-cyan-700 text-white px-3 py-1 rounded-full text-xs mb-2">${req.category}</span>` : ""}
-            <h2 class="text-xl font-bold text-cyan-300">${req.productName}</h2>
-            <p><span class="text-slate-400">Lost at:</span> ${req.location}</p>
-            <p><span class="text-slate-400">Description:</span> ${req.description}</p>
-            <p><span class="text-slate-400">Contact:</span> ${req.contact}</p>
-            ${req.reward ? `<p class="text-yellow-400 font-semibold">🎁 Reward: ${req.reward}</p>` : ""}
-            <p class="text-xs text-slate-500">Posted on ${new Date(req.createdAt).toLocaleString()}</p>
-            <button onclick="deleteRequest('${req._id}')" class="mt-2 bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded-full text-sm transition">
-              🗑️ Delete
-            </button>
-          `;
-          container.appendChild(div);
-        });
-
+        allRequests = Array.isArray(data) ? data : [];
+        applyFilters();
       } catch (err) {
         console.error("Error loading requests:", err);
-        emptyState.textContent = "Failed to load requests. Try again later.";
+        emptyState.textContent = "⚠️ Failed to load requests.";
         emptyState.classList.remove('hidden');
       }
+    }
+
+    function applyFilters() {
+      const category = categoryFilter.value.toLowerCase();
+      const location = locationFilter.value.toLowerCase();
+
+      const filtered = allRequests.filter(req => {
+        const matchCategory = category ? req.category?.toLowerCase() === category : true;
+        const matchLocation = location ? req.location?.toLowerCase().includes(location) : true;
+        return matchCategory && matchLocation;
+      });
+
+      renderRequests(filtered);
+    }
+
+    function renderRequests(requests) {
+      container.innerHTML = "";
+      countDisplay.textContent = `Showing ${requests.length} request${requests.length !== 1 ? "s" : ""}`;
+
+      if (requests.length === 0) {
+        emptyState.classList.remove("hidden");
+        return;
+      }
+
+      emptyState.classList.add("hidden");
+
+      requests.forEach((req, i) => {
+        const div = document.createElement('div');
+        div.className = "bg-slate-800/50 border border-white/10 rounded-xl p-6 shadow-lg space-y-3 animate-fadeInUp";
+        div.style.animationDelay = `${i * 100}ms`;
+
+        div.innerHTML = `
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-bold text-cyan-300">${req.productName}</h2>
+            ${req.category ? `<span class="text-xs bg-cyan-700 text-white px-3 py-1 rounded-full">${req.category}</span>` : ""}
+          </div>
+          <p><span class="text-slate-400">📍 Location:</span> ${req.location}</p>
+          <p><span class="text-slate-400">📝 Description:</span> ${req.description || "Not provided"}</p>
+          <p><span class="text-slate-400">📞 Contact:</span> ${req.contact}</p>
+          ${req.reward ? `<p class="text-yellow-400 font-semibold">🎁 Reward: ${req.reward}</p>` : ""}
+          <p class="text-xs text-slate-500">Posted on ${new Date(req.createdAt).toLocaleString()}</p>
+          <button onclick="deleteRequest('${req._id}')" class="mt-2 bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded-full text-sm transition">
+            🗑️ Delete
+          </button>
+        `;
+        container.appendChild(div);
+      });
     }
 
     async function deleteRequest(id) {
@@ -95,18 +140,23 @@
       try {
         const res = await fetch(`${BASE_URL}/api/requests/${id}`, { method: "DELETE" });
         if (res.ok) {
-          alert("Request deleted successfully.");
-          location.reload();
+          alert("✅ Request deleted successfully.");
+          allRequests = allRequests.filter(r => r._id !== id);
+          applyFilters();
         } else {
-          alert("Failed to delete request.");
+          alert("❌ Failed to delete request.");
         }
       } catch (err) {
         console.error("Delete failed:", err);
-        alert("An error occurred while deleting.");
+        alert("❌ An error occurred while deleting.");
       }
     }
 
-    document.addEventListener("DOMContentLoaded", loadRequests);
+    document.addEventListener("DOMContentLoaded", () => {
+      loadRequests();
+      categoryFilter.addEventListener("change", applyFilters);
+      locationFilter.addEventListener("input", applyFilters);
+    });
   </script>
 </body>
 </html>
