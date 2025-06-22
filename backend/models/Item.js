@@ -1,6 +1,4 @@
 // models/Item.js
-console.log("🛬 POST /api/items body:", req.body);
-console.log("🖼️ File uploaded:", req.file);
 const mongoose = require("mongoose");
 
 const ItemSchema = new mongoose.Schema({

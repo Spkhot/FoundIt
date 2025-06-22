@@ -1,4 +1,6 @@
 // controllers/itemController.js
+console.log("🛬 POST /api/items body:", req.body);
+console.log("🖼️ File uploaded:", req.file);
 const Item = require("../models/Item");
 const cloudinary = require("../utils/cloudinary");
 const fs = require("fs");
