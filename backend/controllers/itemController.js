@@ -22,15 +22,35 @@ exports.createItem = async (req, res) => {
     }).save();
 
     res.status(201).json({ message: "Item posted successfully", item });
-    
   } catch (e) {
     console.error("CreateItem error:", e);
     res.status(500).json({ message: "Server error while creating item" });
   }
 };
 
-exports.getItems = async (req, res) => { /* unchanged */ };
-exports.getItemById = async (req, res) => { /* unchanged */ };
+exports.getItems = async (req, res) => {
+  try {
+    const items = await Item.find().sort({ createdAt: -1 });
+    res.status(200).json(items);
+  } catch (e) {
+    console.error("GetItems error:", e);
+    res.status(500).json({ message: "Server error while fetching items" });
+  }
+};
+
+exports.getItemById = async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    res.status(200).json(item);
+  } catch (e) {
+    console.error("GetItemById error:", e);
+    res.status(500).json({ message: "Server error while fetching item" });
+  }
+};
+
 exports.deleteItem = async (req, res) => {
   try {
     const item = await Item.findByIdAndDelete(req.params.id);

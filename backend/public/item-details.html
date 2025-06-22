@@ -132,28 +132,28 @@
       document.getElementById('main-content-wrapper').style.opacity = 1;
 
       itemDetailsContainer.innerHTML = `
-        <div class="flex flex-col md:flex-row gap-6 md:gap-8">
-          <div class="md:w-2/5 animate-fadeInUp">
-            <img src="${BASE_URL}/uploads/${item.image}" alt="Image of ${item.productName}" class="w-full h-auto object-cover rounded-lg shadow-lg border-2 border-white/10" />
-          </div>
-          <div class="md:w-3/5 flex flex-col space-y-4">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-cyan-300 animate-fadeInUp delay-1">${item.productName}</h1>
-            <div class="space-y-3 text-slate-200 text-lg animate-fadeInUp delay-2">
-                <p><strong class="text-slate-400 font-semibold w-28 inline-block">Category:</strong> ${item.category}</p>
-                <p><strong class="text-slate-400 font-semibold w-28 inline-block">Found At:</strong> ${item.location}</p>
-            </div>
-            <div class="text-slate-300 animate-fadeInUp delay-3">
-                <strong class="text-slate-400 font-semibold block mb-1">Description:</strong>
-                <p>${item.description}</p>
-            </div>
-            <div class="mt-4 p-4 bg-slate-900/70 border border-slate-700 rounded-lg animate-fadeInUp delay-4">
-                <strong class="text-slate-400 font-semibold block">Contact to Claim:</strong>
-                <p class="text-xl font-bold text-white">${item.contact}</p>
-            </div>
-            <p class="text-xs text-slate-500 pt-3 animate-fadeInUp delay-5">Posted on ${new Date(item.createdAt).toLocaleString()}</p>
-          </div>
-        </div>
-      `;
+  <div class="flex flex-col md:flex-row gap-6 md:gap-8">
+    <div class="md:w-2/5 animate-fadeInUp">
+      <img src="${item.imageUrl}" alt="Image of ${item.productName}" class="w-full h-auto object-cover rounded-lg shadow-lg border-2 border-white/10" />
+    </div>
+    <div class="md:w-3/5 flex flex-col space-y-4">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-cyan-300 animate-fadeInUp delay-1">${item.productName}</h1>
+      <div class="space-y-3 text-slate-200 text-lg animate-fadeInUp delay-2">
+          <p><strong class="text-slate-400 font-semibold w-28 inline-block">Category:</strong> ${item.category}</p>
+          <p><strong class="text-slate-400 font-semibold w-28 inline-block">Found At:</strong> ${item.location}</p>
+      </div>
+      <div class="text-slate-300 animate-fadeInUp delay-3">
+          <strong class="text-slate-400 font-semibold block mb-1">Description:</strong>
+          <p>${item.description}</p>
+      </div>
+      <div class="mt-4 p-4 bg-slate-900/70 border border-slate-700 rounded-lg animate-fadeInUp delay-4">
+          <strong class="text-slate-400 font-semibold block">Contact to Claim:</strong>
+          <p class="text-xl font-bold text-white">${item.contact}</p>
+      </div>
+      <p class="text-xs text-slate-500 pt-3 animate-fadeInUp delay-5">Posted on ${new Date(item.createdAt).toLocaleString()}</p>
+    </div>
+  </div>
+`;
     } catch (error) {
       console.error(error);
       loading.innerHTML = `<p class="text-red-400 text-center">Failed to load item details. Please try again later.</p>`;

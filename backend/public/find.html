@@ -171,23 +171,24 @@
     });
   }
 
- function applyFilters(allItems) {
+function applyFilters(allItems) {
   const searchText = searchInput.value.trim().toLowerCase();
-  const selectedCategory = categorySelect.value.trim().toLowerCase();
+  const selectedCategory = categorySelect.value;
 
   const filtered = allItems.filter(item => {
-    const name = item.productName?.trim().toLowerCase();
-    const location = item.location?.trim().toLowerCase();
-    const category = item.category?.trim().toLowerCase();
+    const name = (item.productName || "").trim().toLowerCase();
+    const loc = (item.location || "").trim().toLowerCase();
+    const cat = (item.category || "").trim().toLowerCase();
 
-    const matchText = name.includes(searchText) || location.includes(searchText);
-    const matchCategory = selectedCategory ? category === selectedCategory : true;
+    const matchText = !searchText || name.includes(searchText) || loc.includes(searchText);
+    const matchCategory = !selectedCategory || cat === selectedCategory;
 
     return matchText && matchCategory;
   });
 
   renderItems(filtered);
 }
+
 
 
 
