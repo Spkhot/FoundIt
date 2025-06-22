@@ -1,6 +1,5 @@
 // controllers/itemController.js
-console.log("🛬 POST /api/items body:", req.body);
-console.log("🖼️ File uploaded:", req.file);
+
 const Item = require("../models/Item");
 const cloudinary = require("../utils/cloudinary");
 const fs = require("fs");
@@ -8,7 +7,7 @@ const fs = require("fs");
 exports.createItem = async (req, res) => {
   try {
     console.log("🛬 Received POST /api/items", "file:", req.file, "body:", req.body);
-
+     
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required." });
     }
