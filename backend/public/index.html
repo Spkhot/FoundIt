@@ -284,7 +284,8 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", loadFeedbacks);
+  document.addEventListener("DOMContentLoaded", () => {
+  loadFeedbacks(); // keep your feedback loading
 
   const geminiIcon = document.getElementById("geminiIcon");
   const geminiChat = document.getElementById("geminiChat");
@@ -292,7 +293,7 @@
   const geminiSend = document.getElementById("geminiSend");
   const geminiMessages = document.getElementById("geminiMessages");
 
-  const GEMINI_API_KEY = "AIzaSyBnF4M39YZWz5o4XEJO1yTYEwjGIIhGvNk"; // Replace with your actual key
+  const GEMINI_API_KEY = "AIzaSyBnF4M39YZWz5o4XEJO1yTYEwjGIIhGvNk";
   const GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
 
   geminiIcon.addEventListener("click", () => {
@@ -301,7 +302,10 @@
 
   geminiSend.addEventListener("click", sendToGemini);
   geminiInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") sendToGemini();
+    if (e.key === "Enter") {
+      e.preventDefault(); // prevent form submission
+      sendToGemini();
+    }
   });
 
   async function sendToGemini() {
@@ -331,5 +335,7 @@
       geminiMessages.innerHTML += `<div class="text-red-500">⚠️ Error fetching Gemini response.</div>`;
     }
   }
+});
+
 </script>
 </html>
