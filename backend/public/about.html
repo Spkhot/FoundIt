@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | FoundIt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="logo.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #030712;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-25px) rotate(15deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    .shape {
+      position: absolute;
+      border-radius: 9999px;
+      background: linear-gradient(45deg, rgba(168, 85, 247, 0.1), rgba(99, 102, 241, 0.1));
+      filter: blur(60px);
+      animation: float 12s ease-in-out infinite;
+      z-index: 0;
+    }
+    .shape1 { width: 400px; height: 400px; top: -5%; left: -5%; animation-duration: 13s; }
+    .shape2 { width: 500px; height: 500px; top: 60%; right: -15%; animation-duration: 16s; animation-delay: 2s; }
+
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .scroll-animate.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .delay-200 { transition-delay: 200ms; }
+    .delay-400 { transition-delay: 400ms; }
+  </style>
+</head>
+<body class="text-white selection:bg-purple-500 selection:text-white">
+
+  <!-- Animated Background -->
+  <div class="fixed inset-0 z-0">
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+  </div>
+
+  <!-- Sticky Header -->
+  <header class="bg-black/20 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
+      <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold tracking-wider hover:text-cyan-300 transition-colors">
+          <span class="text-cyan-400">FoundIt</span> Hub
+        </a>
+        <div class="flex items-center space-x-4">
+          <a href="about.html" class="text-sm font-semibold py-2 px-4 rounded-full hover:bg-white/10 transition-colors">
+            About
+          </a>
+          <a href="index.html" class="hidden sm:inline-block bg-white/90 text-slate-900 font-semibold py-2 px-5 rounded-full hover:bg-cyan-300 transition-all duration-300 shadow-lg transform hover:scale-105">
+            Home
+          </a>
+        </div>
+      </nav>
+    </header>
+
+  <!-- Main Content -->
+  <div class="relative z-10">
+    <!-- Hero Section -->
+    <header class="text-center pt-40 pb-20 px-6">
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight scroll-animate">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">About FoundIt</span>
+      </h1>
+      <p class="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto scroll-animate delay-200">
+        The story behind our mission to reconnect people with their cherished belongings through the power of community and technology.
+      </p>
+    </header>
+
+    <!-- Our Mission Section -->
+    <section class="py-16 px-6">
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12 items-center">
+        <div class="lg:col-span-2 scroll-animate">
+          <h2 class="text-3xl md:text-4xl font-bold">Our Mission</h2>
+        </div>
+        <div class="lg:col-span-3 text-lg text-gray-300 leading-relaxed space-y-4 scroll-animate delay-200">
+          <p>
+            Every day, countless items—wallets, phones, keys, and irreplaceable memories—go missing. We saw a gap: a lack of a simple, trustworthy, and centralized system for people to report what they've found or search for what they've lost.
+          </p>
+          <p>
+            That's why we created <span class="font-bold text-indigo-400">FoundIt</span>. Our mission is to be the definitive bridge between a lost item and its owner, fostering a global community built on kindness, trust, and the simple desire to help one another.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guiding Principles Section -->
+    <section class="py-16 px-6 bg-white/5">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-5xl font-extrabold scroll-animate">The Principles That Guide Us</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Principle 1: Community -->
+          <div class="text-center p-8 scroll-animate">
+            <div class="flex items-center justify-center h-16 w-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg"><svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+            <h3 class="text-2xl font-bold mb-2">Community First</h3>
+            <p class="text-gray-400">We believe in the collective power of people. Our platform is a tool to amplify the inherent kindness within our communities.</p>
+          </div>
+          <!-- Principle 2: Simplicity -->
+          <div class="text-center p-8 scroll-animate delay-200">
+            <div class="flex items-center justify-center h-16 w-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg"><svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+            <h3 class="text-2xl font-bold mb-2">Radical Simplicity</h3>
+            <p class="text-gray-400">The process of reporting or finding an item should be effortless. We are obsessed with creating a clear, fast, and intuitive user experience.</p>
+          </div>
+          <!-- Principle 3: Security -->
+          <div class="text-center p-8 scroll-animate delay-400">
+            <div class="flex items-center justify-center h-16 w-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg"><svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 20.417l4.5-4.5M12 14a2 2 0 100-4 2 2 0 000 4z"/></svg></div>
+            <h3 class="text-2xl font-bold mb-2">Privacy & Safety</h3>
+            <p class="text-gray-400">Your security is non-negotiable. We ensure all interactions are anonymous and communications are encrypted until you decide otherwise.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Final CTA Section -->
+    <section class="py-20 md:py-24 px-6">
+      <div class="max-w-4xl mx-auto text-center p-8 md:p-16 rounded-3xl bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 scroll-animate shadow-2xl shadow-indigo-600/30">
+        <h2 class="text-3xl md:text-5xl font-extrabold mb-4">Join Our Mission</h2>
+        <p class="text-lg text-purple-200 mb-8 max-w-2xl mx-auto">Be part of a movement that spreads kindness, one found item at a time. Your next search or post could make someone's day.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="post-found.html" class="bg-white text-indigo-600 font-bold py-4 px-8 rounded-xl transition transform hover:scale-105 duration-300 shadow-lg">Report a Found Item</a>
+          <a href="find.html" class="bg-black/20 hover:bg-black/30 text-white font-bold py-4 px-8 rounded-xl transition transform hover:scale-105 duration-300">Search for a Lost Item</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-12 px-6">
+      <p class="text-sm text-gray-500">© 2024 FoundIt. Built with ❤️ for the community.</p>
+    </footer>
+  </div>
+
+  <!-- JavaScript for Scroll Animations -->
+  <script>
+    const animatedElements = document.querySelectorAll('.scroll-animate');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    animatedElements.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
