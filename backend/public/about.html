@@ -8,6 +8,24 @@
   <link rel="icon" href="logo.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    @keyframes logoPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
+
+  .animate-logo {
+    animation: logoPulse 1.5s ease-in-out infinite;
+  }
+
+  #loader {
+    transition: opacity 0.5s ease;
+  }
     body {
         font-family: 'Inter', sans-serif;
         background-color: #030712;
@@ -43,7 +61,9 @@
   </style>
 </head>
 <body class="text-white selection:bg-purple-500 selection:text-white">
-
+ <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 text-white">
+  <h1 class="text-4xl font-extrabold tracking-wide animate-logo text-cyan-400">FoundIt</h1>
+</div>
   <!-- Animated Background -->
   <div class="fixed inset-0 z-0">
     <div class="shape shape1"></div>
@@ -145,6 +165,11 @@
 
   <!-- JavaScript for Scroll Animations -->
   <script>
+    window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    loader.classList.add("opacity-0");
+    setTimeout(() => loader.style.display = "none", 500);
+  });
     const animatedElements = document.querySelectorAll('.scroll-animate');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

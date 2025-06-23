@@ -14,7 +14,24 @@
     body {
       font-family: 'Poppins', sans-serif;
     }
-    
+    @keyframes logoPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
+
+  .animate-logo {
+    animation: logoPulse 1.5s ease-in-out infinite;
+  }
+
+  #loader {
+    transition: opacity 0.5s ease;
+  }
     /* Background Animation */
     @keyframes backgroundPan {
       0% { background-position: 0% 50%; }
@@ -51,6 +68,10 @@
   </style>
 </head>
 <body class="bg-slate-900 text-white">
+ <!-- Custom Loader -->
+<div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 text-white">
+  <h1 class="text-4xl font-extrabold tracking-wide animate-logo text-cyan-400">FoundIt</h1>
+</div>
 
   <!-- Animated Background -->
   <div class="animated-gradient fixed top-0 left-0 w-full h-full z-0"></div>
@@ -118,6 +139,11 @@
   </div>
 
  <script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    loader.classList.add("opacity-0");
+    setTimeout(() => loader.style.display = "none", 500);
+  });
   const BASE_URL = location.hostname === "localhost"
     ? "http://localhost:5000"
     : "https://foundit-imky.onrender.com";
