@@ -1,0 +1,32 @@
+<form id="feedbackForm">
+  <input name="name" placeholder="Your Name" required />
+  <textarea name="message" placeholder="Your Feedback" required></textarea>
+  <button type="submit">Submit</button>
+</form>
+
+<div id="status"></div>
+
+<script>
+  const form = document.getElementById('feedbackForm');
+  const statusDiv = document.getElementById('status');
+  const BASE_URL = location.hostname === "localhost" ? "http://localhost:5000" : "https://foundit-imky.onrender.com";
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const payload = {
+      name: formData.get('name'),
+      message: formData.get('message')
+    };
+
+    const res = await fetch(`${BASE_URL}/api/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    statusDiv.textContent = data.message;
+    if (res.ok) form.reset();
+  });
+</script>

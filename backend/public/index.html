@@ -148,6 +148,21 @@
         </p>
       </div>
     </section>
+  <section class="py-16 px-6 max-w-4xl mx-auto fade-in-up">
+  <h2 class="text-3xl font-bold text-cyan-300 text-center mb-6">💬 Share Your Experience</h2>
+  <form id="feedbackForm" class="bg-slate-800/40 backdrop-blur-lg p-6 rounded-xl space-y-4 border border-white/10 shadow-xl">
+    <input name="name" type="text" placeholder="Your Name" required class="w-full p-3 rounded bg-slate-900/60 border border-slate-700 focus:ring-2 focus:ring-cyan-400 focus:outline-none">
+    <textarea name="message" rows="4" placeholder="Your Feedback..." required class="w-full p-3 rounded bg-slate-900/60 border border-slate-700 focus:ring-2 focus:ring-cyan-400 focus:outline-none"></textarea>
+    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2 px-5 rounded-full transition">Submit Feedback</button>
+    <p id="feedbackMsg" class="text-sm text-center text-green-400 mt-2"></p>
+  </form>
+</section>
+ <section class="py-12 px-6 max-w-4xl mx-auto fade-in-up">
+  <h3 class="text-2xl font-bold text-cyan-200 text-center mb-6">🗣️ What People Are Saying</h3>
+  <div id="feedbackList" class="space-y-4">
+    <!-- JS will insert feedback cards here -->
+  </div>
+</section>
 
     <footer class="bg-slate-900/50 border-t border-white/10 py-8">
       <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
@@ -185,5 +200,65 @@
     loader.classList.add("opacity-0");
     setTimeout(() => loader.style.display = "none", 500);
   });
+  const feedbackForm = document.getElementById("feedbackForm");
+  const feedbackMsg = document.getElementById("feedbackMsg");
+  const feedbackList = document.getElementById("feedbackList");
+
+  const BASE_URL = location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://your-live-app.onrender.com";
+
+  feedbackForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(feedbackForm);
+    const payload = {
+      name: formData.get("name"),
+      message: formData.get("message")
+    };
+
+    feedbackMsg.textContent = "Submitting...";
+    try {
+      const res = await fetch(`${BASE_URL}/api/feedbacks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        feedbackMsg.textContent = "✅ Feedback submitted!";
+        feedbackForm.reset();
+        loadFeedbacks(); // refresh list
+      } else {
+        feedbackMsg.textContent = `❌ ${data.message}`;
+      }
+    } catch (err) {
+      feedbackMsg.textContent = "⚠️ Failed to send feedback.";
+    }
+  });
+
+  async function loadFeedbacks() {
+    try {
+      const res = await fetch(`${BASE_URL}/api/feedbacks`);
+      const feedbacks = await res.json();
+
+      feedbackList.innerHTML = "";
+
+      feedbacks.slice(0, 4).forEach(fb => {
+        const card = document.createElement("div");
+        card.className = "bg-slate-800/50 p-4 rounded-lg border border-white/10 shadow hover:shadow-cyan-500/10 transition";
+        card.innerHTML = `
+          <p class="text-slate-300">"${fb.message}"</p>
+          <p class="text-sm text-cyan-400 mt-2 text-right">— ${fb.name}</p>
+        `;
+        feedbackList.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error("Could not load feedbacks");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadFeedbacks);
 </script>
 </html>

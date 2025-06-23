@@ -6,6 +6,8 @@ const path = require("path");
 const connectDB = require("./config/db");
 dotenv.config();
 // Load environment variables
+const feedbackRoutes = require('./routes/feedbackRoutes');
+app.use('/api/feedback', feedbackRoutes);
 
 
 const app = express();
