@@ -7,7 +7,7 @@ const connectDB = require("./config/db");
 dotenv.config();
 // Load environment variables
 const feedbackRoutes = require('./routes/feedbackRoutes');
-app.use('/api/feedback', feedbackRoutes);
+
 
 
 const app = express();
@@ -16,6 +16,7 @@ const app = express();
 connectDB();
 
 // Middleware
+app.use('/api/feedback', feedbackRoutes);
 app.use(cors());
 app.use(express.json());
 
