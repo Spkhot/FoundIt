@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FoundIt Hub | Reconnect & Recover</title>
-  <link rel="icon" href="logo.png" />
+  <title>Lost & Found Hub | Reconnect & Recover</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  
+  <link rel="icon" href="logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Poppins', sans-serif; }
 
@@ -19,14 +18,12 @@
     }
 
     @keyframes backgroundPan {
-      0%, 100% { background-position: 0% 50%; }
+      0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    .fade-in-up {
-      animation: fadeInUp 0.8s ease-out forwards;
-    }
-
+    .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
     .delay-1 { animation-delay: 0.2s; }
     .delay-2 { animation-delay: 0.4s; }
     .delay-3 { animation-delay: 0.6s; }
@@ -38,14 +35,12 @@
     }
   </style>
 </head>
-
 <body class="bg-slate-900 text-white overflow-x-hidden">
-  <!-- Background Gradient -->
-  <div class="animated-gradient fixed inset-0 z-0"></div>
+
+  <div class="animated-gradient fixed top-0 left-0 w-full h-full z-0"></div>
 
   <div class="relative z-10 flex flex-col min-h-screen">
 
-    <!-- Navbar -->
     <header class="bg-black/20 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
       <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <a href="#" class="text-2xl font-bold tracking-wider hover:text-cyan-300 transition-colors">
@@ -62,83 +57,90 @@
       </nav>
     </header>
 
-    <!-- Hero Section -->
     <main class="flex-grow flex items-center">
-      <section class="max-w-7xl mx-auto px-6 text-center py-20 md:py-32">
+      <div class="max-w-7xl mx-auto px-6 text-center py-20 md:py-32">
         <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-200 fade-in-up">
           Lost Something? Found Something?
         </h1>
-        <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-slate-300 fade-in-up delay-1">
-          Join a network of helpful humans. Post what you’ve found, search for what you’ve lost, or leave a request with a reward.
-          <span class="block mt-2 text-cyan-300">Even a small action can return a smile to someone’s face. ❤️</span>
-        </p>
+       <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-slate-300 fade-in-up delay-1">
+  Join a network of helpful humans. Post what you’ve found, search for what you’ve lost, or leave a request with a reward.
+  <span class="block mt-2 text-cyan-300">Even a small action can return a smile to someone’s face. ❤️</span>
+</p>
 
-        <!-- Call-to-action Buttons -->
-        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center fade-in-up delay-2">
-          <!-- I Found Something -->
-          <a href="post-found.html" class="cta-button from-purple-500 to-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.085a2 2 0 00-1.736.97l-2.062 4.123A2 2 0 005.236 11H4a2 2 0 00-2 2v4a2 2 0 002 2h2.5" />
-            </svg>
-            <span>I Found Something</span>
-          </a>
 
-          <!-- I Lost Something -->
-          <a href="find.html" class="cta-button from-cyan-500 to-blue-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span>I Lost Something</span>
-          </a>
+        <!-- Existing buttons -->
+<div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center fade-in-up delay-2">
+  <!-- I Found Something -->
+  <a href="post-found.html" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 hover:shadow-xl duration-300 flex items-center justify-center space-x-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.085a2 2 0 00-1.736.97l-2.062 4.123A2 2 0 005.236 11H4a2 2 0 00-2 2v4a2 2 0 002 2h2.5" /></svg>
+    <span>I Found Something</span>
+  </a>
 
-          <!-- Post a Request -->
-          <a href="post-request.html" class="cta-button from-yellow-400 to-orange-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            <span>Post a Request</span>
-          </a>
+  <!-- I Lost Something -->
+  <a href="find.html" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 hover:shadow-xl duration-300 flex items-center justify-center space-x-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+    <span>I Lost Something</span>
+  </a>
 
-          <!-- View All Requests -->
-          <a href="all-requests.html" class="cta-button from-emerald-500 to-green-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405M19.5 14.5a2.121 2.121 0 00-3 0l-.793.793M12 4v16m8-8H4" />
-            </svg>
-            <span>View All Requests</span>
-          </a>
-        </div>
-      </section>
+  <!-- Post Request -->
+  <a href="post-request.html" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 hover:shadow-xl duration-300 flex items-center justify-center space-x-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
+    <span>Post a Request</span>
+  </a>
+
+  <!-- View Requests -->
+  <a href="all-requests.html" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105 hover:shadow-xl duration-300 flex items-center justify-center space-x-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405M19.5 14.5a2.121 2.121 0 00-3 0l-.793.793M12 4v16m8-8H4" />
+    </svg>
+    <span>View All Requests</span>
+  </a>
+</div>
+
+
+      </div>
     </main>
 
-    <!-- About Section -->
     <section id="about" class="py-20 bg-black/10 backdrop-blur-md">
       <div class="max-w-4xl mx-auto px-6 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-cyan-300 fade-in-up">Our Mission</h2>
-        <div class="w-24 h-1 bg-cyan-400 mx-auto my-6 rounded-full fade-in-up delay-1"></div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-cyan-300 fade-in-up">Our Mission</h2>
+        <div class="w-24 h-1 bg-cyan-400 mx-auto mb-8 rounded-full fade-in-up delay-1"></div>
         <p class="text-slate-300 text-lg leading-relaxed fade-in-up delay-2">
           Every day, countless items are lost — but they’re also found. Our mission is to bridge that gap. The FoundIt Hub is a simple, secure place where community spirit shines. Whether it’s a dropped phone, a missing ID, or a found pet collar, we help stories end in smiles.
         </p>
       </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-slate-900/50 border-t border-white/10 py-8">
       <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
         <p class="text-sm text-slate-400">© 2024 FoundIt Hub. All Rights Reserved.</p>
         <div class="flex space-x-6 items-center">
-          <!-- Social icons remain unchanged -->
-          <!-- Use original social SVGs here for brevity -->
-        </div>
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/sam_141028/?next=%2F" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-pink-500 transition-colors">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7.75 2A5.75 5.75 0 0 0 2 7.75v8.5A5.75 5.75 0 0 0 7.75 22h8.5A5.75 5.75 0 0 0 22 16.25v-8.5A5.75 5.75 0 0 0 16.25 2h-8.5ZM12 8a4 4 0 1 1 0 8a4 4 0 0 1 0-8Zm6.5-.75a1.25 1.25 0 1 1-2.5 0a1.25 1.25 0 0 1 2.5 0ZM20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4h8.5A3.75 3.75 0 0 1 20 7.75ZM14 12a2 2 0 1 1-4 0a2 2 0 0 1 4 0Z" />
+    </svg>
+  </a>
+
+  <!-- LinkedIn -->
+  <a href="https://www.linkedin.com/in/soham-khot-6371ab277/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-blue-400 transition-colors">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4.98 3.5A2.5 2.5 0 0 1 7.48 6a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 2.5-2.5Zm.02 4.5h-.03C4.46 8 4 8.5 4 9.25v11.5C4 21.5 4.5 22 5.25 22h1.5C7.5 22 8 21.5 8 20.75V9.25C8 8.5 7.5 8 6.75 8h-1.75Zm6.75 0c-.75 0-1.25.5-1.25 1.25v11.5c0 .75.5 1.25 1.25 1.25h1.5c.75 0 1.25-.5 1.25-1.25V14c0-1.2.45-2.25 1.5-2.25c.93 0 1.5.75 1.5 2v6c0 .75.5 1.25 1.25 1.25h1.5c.75 0 1.25-.5 1.25-1.25v-6.5c0-2.6-1.4-4.5-3.75-4.5c-1.68 0-2.68.95-3.25 1.75V9.25C13 8.5 12.5 8 11.75 8h-1.5Z"/>
+    </svg>
+  </a>
+
+  <!-- GitHub -->
+  <a href="https://github.com/Spkhot" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.67c.5.09.66-.22.66-.48v-1.7c-2.78.62-3.37-1.34-3.37-1.34c-.46-1.2-1.12-1.52-1.12-1.52c-.92-.64.07-.63.07-.63c1.02.07 1.56 1.06 1.56 1.06c.9 1.58 2.36 1.12 2.94.86c.09-.67.35-1.12.63-1.38c-2.22-.26-4.55-1.14-4.55-5.06c0-1.12.39-2.04 1.03-2.76c-.1-.26-.45-1.3.1-2.7c0 0 .84-.27 2.75 1.05A9.34 9.34 0 0 1 12 6.84c.85 0 1.7.11 2.5.32c1.9-1.32 2.73-1.05 2.73-1.05c.55 1.4.2 2.44.1 2.7c.65.72 1.03 1.64 1.03 2.76c0 3.93-2.34 4.79-4.57 5.04c.36.32.68.94.68 1.9v2.82c0 .27.18.58.68.48A10.28 10.28 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"/>
+    </svg>
+  </a>
+</div>
+
       </div>
     </footer>
   </div>
-
-  <!-- Reusable CTA button class -->
-  <style>
-    .cta-button {
-      @apply flex items-center justify-center space-x-2 font-semibold py-3 px-8 rounded-full text-white transition-all transform hover:scale-105 hover:shadow-xl duration-300;
-      background-image: linear-gradient(to right, var(--tw-gradient-stops));
-    }
-  </style>
 </body>
 </html>
