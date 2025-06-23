@@ -11,51 +11,73 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Poppins', sans-serif; }
-
+  
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-     @keyframes logoPulse {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.6;
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
     }
-    50% {
-      transform: scale(1.2);
-      opacity: 1;
+    @keyframes floatBot {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
     }
-  }
-  #geminiChat {
-  max-height: 420px;
-  z-index: 9999;
-}
-#geminiMessages::-webkit-scrollbar {
-  width: 6px;
-}
-#geminiMessages::-webkit-scrollbar-thumb {
-  background-color: #94a3b8;
-  border-radius: 4px;
-}
-  .animate-logo {
-    animation: logoPulse 1.5s ease-in-out infinite;
-  }
-
-  #loader {
-    transition: opacity 0.5s ease;
-  }
-
+    .animate-float { animation: floatBot 3s ease-in-out infinite; }
+    #geminiChat { max-height: 420px; z-index: 9999; }
+    #geminiMessages::-webkit-scrollbar { width: 6px; }
+    #geminiMessages::-webkit-scrollbar-thumb {
+      background-color: #94a3b8;
+      border-radius: 4px;
+    }
+    .chat-bubble-user {
+      background-color: #06b6d4;
+      color: white;
+      border-radius: 1rem 1rem 0 1rem;
+      padding: 0.5rem 1rem;
+      max-width: 80%;
+      align-self: flex-end;
+    }
+    .chat-bubble-bot {
+      background-color: #e0f2fe;
+      color: #0f172a;
+      border-radius: 1rem 1rem 1rem 0;
+      padding: 0.5rem 1rem;
+      max-width: 80%;
+      align-self: flex-start;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    #geminiChat {
+      max-height: 420px;
+      z-index: 9999;
+    }
+    #geminiMessages::-webkit-scrollbar {
+      width: 6px;
+    }
+    #geminiMessages::-webkit-scrollbar-thumb {
+      background-color: #94a3b8;
+      border-radius: 4px;
+    }
+    .animate-logo {
+      animation: logoPulse 1.5s ease-in-out infinite;
+    }
+    #loader {
+      transition: opacity 0.5s ease;
+    }
     @keyframes backgroundPan {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-  
     .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
     .delay-1 { animation-delay: 0.2s; }
     .delay-2 { animation-delay: 0.4s; }
     .delay-3 { animation-delay: 0.6s; }
-
     .animated-gradient {
       background: linear-gradient(135deg, #6B21A8, #3B82F6, #EC4899, #F59E0B);
       background-size: 400% 400%;
@@ -203,139 +225,122 @@
       </div>
     </footer>
   </div>
-  <!-- Chatbot Toggle Button -->
-<div id="geminiIcon" class="fixed bottom-6 left-6 bg-white text-slate-900 p-3 rounded-full shadow-lg cursor-pointer hover:scale-105 transition">
+<!-- Gemini Icon -->
+<div id="geminiIcon" class="fixed bottom-6 left-6 z-[9999] bg-cyan-500 text-white p-3 rounded-full shadow-lg cursor-pointer hover:scale-105 transition animate-float">
   🤖
 </div>
 
-<!-- Chatbot Modal -->
-<div id="geminiChat" class="hidden fixed bottom-20 left-6 w-80 bg-white text-black rounded-lg shadow-lg overflow-hidden">
-  <div class="p-4 font-bold bg-cyan-600 text-white">Gemini Assistant</div>
-  <div id="geminiMessages" class="h-60 overflow-y-auto p-3 space-y-2 text-sm bg-slate-100"></div>
-  <div class="p-3 border-t flex items-center space-x-2">
-    <input id="geminiInput" class="flex-1 p-2 border rounded" placeholder="Ask me something..." />
-    <button id="geminiSend" class="bg-cyan-600 text-white px-3 py-1 rounded">Send</button>
+<!-- Chat Modal -->
+<div id="geminiChat" class="hidden fixed bottom-24 left-4 right-4 sm:left-6 sm:w-80 bg-white text-black rounded-xl shadow-2xl overflow-hidden z-[9999] flex flex-col">
+  <div class="p-4 font-bold bg-gradient-to-r from-cyan-600 to-blue-700 text-white">FoundIt Assistant</div>
+  <div id="geminiMessages" class="h-60 overflow-y-auto p-3 space-y-2 text-sm bg-slate-50 chat-container"></div>
+  <div class="p-3 border-t flex items-center space-x-2 bg-slate-100">
+    <input id="geminiInput" class="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-400" placeholder="Ask me something..." />
+    <button id="geminiSend" class="bg-cyan-600 text-white px-3 py-1 rounded hover:bg-cyan-700">Send</button>
   </div>
 </div>
 
-</body>
 <script>
-  window.addEventListener("load", () => {
+   window.addEventListener("load", () => {
     const loader = document.getElementById("loader");
     loader.classList.add("opacity-0");
     setTimeout(() => loader.style.display = "none", 500);
   });
-  const feedbackForm = document.getElementById("feedbackForm");
-  const feedbackMsg = document.getElementById("feedbackMsg");
-  const feedbackList = document.getElementById("feedbackList");
+const GEMINI_API_KEY = "AIzaSyBnF4M39YZWz5o4XEJO1yTYEwjGIIhGvNk";
+const GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
 
-  const BASE_URL = location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : "https://foundit-imky.onrender.com";
+let inactivityTimer;
 
-  feedbackForm.addEventListener("submit", async (e) => {
+const geminiIcon = document.getElementById("geminiIcon");
+const geminiChat = document.getElementById("geminiChat");
+const geminiInput = document.getElementById("geminiInput");
+const geminiSend = document.getElementById("geminiSend");
+const geminiMessages = document.getElementById("geminiMessages");
+const geminiMic = document.getElementById("geminiMic");
+
+function renderMessage(role, text) {
+  const bubble = document.createElement("div");
+  bubble.className = role === "user" ? "chat-bubble-user self-end" : "chat-bubble-bot self-start";
+  bubble.innerHTML = `<strong>${role === "user" ? "You" : "🤖 FoundIt"}:</strong> ${text}`;
+  geminiMessages.appendChild(bubble);
+  geminiMessages.scrollTop = geminiMessages.scrollHeight;
+}
+
+function resetInactivityTimer() {
+  clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    geminiChat.classList.add("hidden");
+  }, 30000);
+}
+
+geminiIcon.addEventListener("click", () => {
+  geminiChat.classList.toggle("hidden");
+  geminiMessages.innerHTML = ""; // clear old messages
+});
+
+geminiSend.addEventListener("click", sendToGemini);
+
+geminiInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
     e.preventDefault();
-    const formData = new FormData(feedbackForm);
-    const payload = {
-      name: formData.get("name"),
-      message: formData.get("message")
-    };
-
-    feedbackMsg.textContent = "Submitting...";
-    try {
-      const res = await fetch(`${BASE_URL}/api/feedback`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        feedbackMsg.textContent = "✅ Feedback submitted!";
-        feedbackForm.reset();
-        loadFeedbacks(); // refresh list
-      } else {
-        feedbackMsg.textContent = `❌ ${data.message}`;
-      }
-    } catch (err) {
-      feedbackMsg.textContent = "⚠️ Failed to send feedback.";
-    }
-  });
-
-  async function loadFeedbacks() {
-    try {
-      const res = await fetch(`${BASE_URL}/api/feedback`);
-      const feedbacks = await res.json();
-
-      feedbackList.innerHTML = "";
-
-      feedbacks.slice(0, 4).forEach(fb => {
-        const card = document.createElement("div");
-        card.className = "bg-slate-800/50 p-4 rounded-lg border border-white/10 shadow hover:shadow-cyan-500/10 transition";
-        card.innerHTML = `
-          <p class="text-slate-300">"${fb.message}"</p>
-          <p class="text-sm text-cyan-400 mt-2 text-right">— ${fb.name}</p>
-        `;
-        feedbackList.appendChild(card);
-      });
-
-    } catch (err) {
-      console.error("Could not load feedbacks");
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-  loadFeedbacks(); // keep your feedback loading
-
-  const geminiIcon = document.getElementById("geminiIcon");
-  const geminiChat = document.getElementById("geminiChat");
-  const geminiInput = document.getElementById("geminiInput");
-  const geminiSend = document.getElementById("geminiSend");
-  const geminiMessages = document.getElementById("geminiMessages");
-
-  const GEMINI_API_KEY = "AIzaSyBnF4M39YZWz5o4XEJO1yTYEwjGIIhGvNk";
-  const GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
-
-  geminiIcon.addEventListener("click", () => {
-    geminiChat.classList.toggle("hidden");
-  });
-
-  geminiSend.addEventListener("click", sendToGemini);
-  geminiInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // prevent form submission
-      sendToGemini();
-    }
-  });
-
-  async function sendToGemini() {
-    const input = geminiInput.value.trim();
-    if (!input) return;
-
-    geminiMessages.innerHTML += `<div class="bg-white p-2 rounded shadow text-right"><strong>You:</strong> ${input}</div>`;
-    geminiInput.value = "";
-
-    try {
-      const res = await fetch(`${GEMINI_ENDPOINT}?key=${GEMINI_API_KEY}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: input }] }]
-        })
-      });
-
-      const data = await res.json();
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "🤖 Sorry, I couldn't understand that.";
-
-      geminiMessages.innerHTML += `<div class="bg-slate-200 p-2 rounded shadow"><strong>Gemini:</strong> ${reply}</div>`;
-      geminiMessages.scrollTop = geminiMessages.scrollHeight;
-
-    } catch (err) {
-      console.error(err);
-      geminiMessages.innerHTML += `<div class="text-red-500">⚠️ Error fetching Gemini response.</div>`;
-    }
+    sendToGemini();
   }
 });
 
+geminiChat.addEventListener("mouseenter", resetInactivityTimer);
+geminiChat.addEventListener("mousemove", resetInactivityTimer);
+geminiInput.addEventListener("input", resetInactivityTimer);
+
+geminiMic.addEventListener("click", () => {
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = "en-US";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  recognition.start();
+
+  recognition.onresult = (event) => {
+    geminiInput.value = event.results[0][0].transcript;
+  };
+
+  recognition.onerror = (event) => {
+    alert("Voice input error: " + event.error);
+  };
+});
+
+async function sendToGemini() {
+  const input = geminiInput.value.trim();
+  if (!input) return;
+  renderMessage("user", input);
+  geminiInput.value = "";
+
+  try {
+    const res = await fetch(`${GEMINI_ENDPOINT}?key=${GEMINI_API_KEY}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: input }] }]
+      })
+    });
+
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 
+      `🤖 Oh no! I’m here to help. While I can't physically search for items, I can guide you to retrace your steps and increase your chances of finding it.
+
+Please tell me:
+- 🧾 What did you lose?
+- 📍 Where do you think you lost it?
+- ⏰ When was the last time you saw it?
+- 🕵️‍♂️ What were you doing at that time?
+
+Once I know this, I’ll suggest where to look or how to post a helpful request on *FoundIt Hub*.`;
+
+    renderMessage("bot", reply);
+
+  } catch (err) {
+    console.error(err);
+    renderMessage("bot", "⚠️ Error fetching Gemini response.");
+  }
+}
 </script>
+</body>
 </html>
