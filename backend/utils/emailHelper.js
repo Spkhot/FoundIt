@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.sendVerificationEmail = async (email, itemId, token) => {
-  const verificationLink = `https://your-domain.com/verify/${itemId}/${token}`;
+  const verificationLink = `https://foundit-imky.onrender.com/${itemId}/${token}`;
 
   const mailOptions = {
     from: `"FoundIt Hub" <${process.env.EMAIL_USER}>`,
