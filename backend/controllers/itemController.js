@@ -7,17 +7,21 @@ exports.createItem = async (req, res) => {
     console.log("Fields:", req.body);
     console.log("File:", req.file);
 
+    const { email, productName, category, location, description, contact } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required for verification" });
+
     if (!req.file) return res.status(400).json({ message: "Image is required" });
 
     const uploadRes = await cloudinary.uploader.upload(req.file.path, { folder: "found-items" });
     fs.unlinkSync(req.file.path);
 
     const item = await new Item({
-      productName: req.body.productName,
-      category: req.body.category,
-      location: req.body.location,
-      description: req.body.description,
-      contact: req.body.contact,
+      productName,
+      category,
+      location,
+      description,
+      contact,
+      email,  // Save verified email
       imageUrl: uploadRes.secure_url,
     }).save();
 
@@ -53,10 +57,19 @@ exports.getItemById = async (req, res) => {
 
 exports.deleteItem = async (req, res) => {
   try {
-    const item = await Item.findByIdAndDelete(req.params.id);
-    if (!item) return res.status(404).json({ message: "Not found" });
-    res.json({ message: "Deleted" });
-  } catch {
+    const item = await Item.findById(req.params.id);
+    if (!item) return res.status(404).json({ message: "Item not found" });
+
+    // Check if email matches
+    const userEmail = req.body.email;
+    if (!userEmail || userEmail !== item.email) {
+      return res.status(403).json({ message: "Unauthorized. Only the person who posted this can delete it." });
+    }
+
+    await Item.findByIdAndDelete(req.params.id);
+    res.json({ message: "Deleted successfully." });
+  } catch (e) {
+    console.error("DeleteItem error:", e);
     res.status(500).json({ message: "Server error while deleting" });
   }
 };

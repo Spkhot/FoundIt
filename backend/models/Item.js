@@ -6,6 +6,7 @@ const schema = new mongoose.Schema({
   location: String,
   description: String,
   contact: String,
+  email: { type: String, required: true },  // 🔐 Email of the verified user
   imageUrl: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }
 });

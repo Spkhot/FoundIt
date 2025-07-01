@@ -107,7 +107,15 @@
           
           <input name="location" placeholder="Where did you find it?" required class="w-full bg-slate-700/50 border border-slate-600 rounded-lg p-3 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" />
           <textarea name="description" placeholder="Describe the item (color, brand, any unique marks...)" required rows="4" class="w-full bg-slate-700/50 border border-slate-600 rounded-lg p-3 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition"></textarea>
-          <input name="contact" placeholder="Your Contact Number or Email" required class="w-full bg-slate-700/50 border border-slate-600 rounded-lg p-3 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" />
+<input id="emailInput" name="contact" placeholder="Your Email" type="email" required class="w-full bg-slate-700/50 border border-slate-600 rounded-lg p-3 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" />
+
+<div class="flex items-center gap-3 mt-2">
+  <button type="button" id="sendOtpBtn" class="px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-700 transition">Send OTP</button>
+  <input type="text" id="otpInput" placeholder="Enter OTP" class="flex-1 px-3 py-2 bg-slate-700/50 text-white border border-slate-600 rounded" />
+  <button type="button" id="verifyOtpBtn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">Verify</button>
+</div>
+
+<div id="otpStatus" class="text-sm mt-2 text-cyan-300 hidden"></div>
 
           <!-- Custom File Input -->
           <div>
@@ -148,6 +156,66 @@
     const submitBtn = document.getElementById('submitBtn');
     const imageUpload = document.getElementById('imageUpload');
     const fileChosen = document.getElementById('file-chosen');
+  
+     let isOtpVerified = false;
+const sendOtpBtn = document.getElementById("sendOtpBtn");
+const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+const emailInput = document.getElementById("emailInput");
+const otpInput = document.getElementById("otpInput");
+const otpStatus = document.getElementById("otpStatus");
+
+// Send OTP
+sendOtpBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  if (!email) return alert("Please enter your email first");
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/otp/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+
+    otpStatus.textContent = "✅ OTP sent to your email.";
+    otpStatus.className = "text-green-400 mt-2";
+    otpStatus.classList.remove("hidden");
+  } catch (err) {
+    otpStatus.textContent = `❌ ${err.message}`;
+    otpStatus.className = "text-red-400 mt-2";
+    otpStatus.classList.remove("hidden");
+  }
+});
+
+// Verify OTP
+verifyOtpBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const otp = otpInput.value.trim();
+  if (!email || !otp) return alert("Enter email and OTP");
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/otp/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Invalid OTP");
+
+    isOtpVerified = true;
+    otpStatus.textContent = "✅ OTP verified successfully!";
+    otpStatus.className = "text-green-400 mt-2";
+    otpStatus.classList.remove("hidden");
+  } catch (err) {
+    otpStatus.textContent = `❌ ${err.message}`;
+    otpStatus.className = "text-red-400 mt-2";
+    otpStatus.classList.remove("hidden");
+  }
+});
+
 
     // ✅ File input label update
     imageUpload.addEventListener('change', () => {
@@ -165,6 +233,14 @@
       message.className = "text-center mt-4 text-lg font-semibold text-yellow-400";
       submitBtn.disabled = true;
       submitBtn.textContent = "Posting...";
+       if (!isOtpVerified) {
+  message.textContent = "❌ Please verify OTP before submitting.";
+  message.className = 'text-center mt-4 text-lg font-semibold text-red-400';
+  message.classList.remove('hidden');
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Post Item';
+  return;
+}
 
       try {
         const res = await fetch(`${BASE_URL}/api/items`, {
@@ -203,8 +279,5 @@
     });
   });
 </script>
-
-
-
 </body>
 </html>

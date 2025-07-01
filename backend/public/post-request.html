@@ -11,24 +11,14 @@
     body {
       font-family: 'Poppins', sans-serif;
     }
-     @keyframes logoPulse {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.6;
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
     }
-    50% {
-      transform: scale(1.2);
-      opacity: 1;
+    .animate-logo {
+      animation: logoPulse 1.5s ease-in-out infinite;
     }
-  }
-
-  .animate-logo {
-    animation: logoPulse 1.5s ease-in-out infinite;
-  }
-
-  #loader {
-    transition: opacity 0.5s ease;
-  }
+    #loader { transition: opacity 0.5s ease; }
     @keyframes backgroundPan {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -45,43 +35,37 @@
     }
     .animate-fadeInUp {
       animation: fadeInUp 0.6s ease-out forwards;
-      opacity: 0; /* Start hidden */
+      opacity: 0;
     }
   </style>
 </head>
 <body class="bg-slate-900 text-white">
-  <!-- Custom Loader -->
-<div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 text-white">
-  <h1 class="text-4xl font-extrabold tracking-wide animate-logo text-cyan-400">FoundIt</h1>
-</div>
+  <!-- Loader -->
+  <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 text-white">
+    <h1 class="text-4xl font-extrabold tracking-wide animate-logo text-cyan-400">FoundIt</h1>
+  </div>
 
-  <!-- Animated Background -->
+  <!-- Background -->
   <div class="animated-gradient fixed top-0 left-0 w-full h-full z-0"></div>
 
-  <!-- Content Wrapper -->
+  <!-- Wrapper -->
   <div class="relative z-10 min-h-screen flex flex-col">
     <header class="bg-black/20 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
       <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <a href="index.html" class="text-2xl font-bold tracking-wider hover:text-cyan-300 transition-colors">
           <span class="text-cyan-400">FoundIt</span> Hub
         </a>
-        <a href="index.html" class="bg-white/90 text-slate-900 font-semibold py-2 px-5 rounded-full hover:bg-cyan-300 transition-all duration-300 shadow-lg transform hover:scale-105">
-          Home
-        </a>
+        <a href="index.html" class="bg-white/90 text-slate-900 font-semibold py-2 px-5 rounded-full hover:bg-cyan-300 transition-all duration-300 shadow-lg transform hover:scale-105">Home</a>
       </nav>
     </header>
 
     <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6">
       <div class="w-full max-w-2xl">
         <div class="text-center mb-8">
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white animate-fadeInUp">
-            Lost Something?
-          </h1>
-          <p class="text-slate-300 mt-2 animate-fadeInUp" style="animation-delay: 100ms;">
-            Post a request and let our community help you find it.
-          </p>
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white animate-fadeInUp">Lost Something?</h1>
+          <p class="text-slate-300 mt-2 animate-fadeInUp" style="animation-delay: 100ms;">Post a request and let our community help you find it.</p>
         </div>
-        
+
         <div class="text-center mb-8 animate-fadeInUp" style="animation-delay: 200ms;">
           <a href="all-requests.html" class="bg-white/10 border border-white/20 text-white font-semibold py-2 px-6 rounded-full transition-all transform hover:scale-105 hover:bg-white/20 duration-300">
             View All Requests
@@ -89,7 +73,6 @@
         </div>
 
         <form id="requestForm" class="bg-slate-800/50 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl space-y-5 animate-fadeInUp" style="animation-delay: 300ms;">
-          
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block mb-1 text-sm font-medium text-slate-300">Item Name <span class="text-red-500">*</span></label>
@@ -109,7 +92,7 @@
               </select>
             </div>
           </div>
-          
+
           <div>
             <label class="block mb-1 text-sm font-medium text-slate-300">Last Known Location <span class="text-red-500">*</span></label>
             <input type="text" name="location" required class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="e.g., Central Park, near the fountain">
@@ -122,12 +105,20 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label class="block mb-1 text-sm font-medium text-slate-300">Contact Number <span class="text-red-500">*</span></label>
-              <input type="tel" name="contact" required class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="Your phone or email">
+              <label class="block mb-1 text-sm font-medium text-slate-300">Your Email <span class="text-red-500">*</span></label>
+              <input type="email" id="emailInput" name="contact" required class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="you@example.com">
+
+              <div class="flex items-center gap-3 mt-2">
+                <button type="button" id="sendOtpBtn" class="px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-700 transition">Send OTP</button>
+                <input type="text" id="otpInput" placeholder="Enter OTP" class="flex-1 px-3 py-2 bg-slate-700/50 text-white border border-slate-600 rounded" />
+                <button type="button" id="verifyOtpBtn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">Verify OTP</button>
+              </div>
+              <div id="otpStatus" class="text-sm mt-2 text-cyan-300 hidden"></div>
             </div>
+
             <div>
               <label class="block mb-1 text-sm font-medium text-slate-300">Reward (Optional)</label>
-              <input type="text" name="reward" class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="e.g., 50₹ or Coffee😊">
+              <input type="text" name="reward" class="w-full px-4 py-2.5 bg-slate-700/50 text-white rounded-lg border border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition" placeholder="e.g., ₹100 reward">
             </div>
           </div>
 
@@ -143,27 +134,90 @@
 
   <script>
     window.addEventListener("load", () => {
-    const loader = document.getElementById("loader");
-    loader.classList.add("opacity-0");
-    setTimeout(() => loader.style.display = "none", 500);
-  });
+      const loader = document.getElementById("loader");
+      loader.classList.add("opacity-0");
+      setTimeout(() => loader.style.display = "none", 500);
+    });
+
     const BASE_URL = location.hostname === "localhost"
       ? "http://localhost:5000"
       : "https://foundit-imky.onrender.com";
 
-    const form = document.getElementById('requestForm');
-    const message = document.getElementById('message');
-    const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById("requestForm");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submitBtn");
 
-    form.addEventListener('submit', async (e) => {
+    const sendOtpBtn = document.getElementById("sendOtpBtn");
+    const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+    const emailInput = document.getElementById("emailInput");
+    const otpInput = document.getElementById("otpInput");
+    const otpStatus = document.getElementById("otpStatus");
+
+    let isOtpVerified = false;
+
+    sendOtpBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      if (!email) return alert("Please enter your email first");
+
+      try {
+        const res = await fetch(`${BASE_URL}/api/otp/send`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        otpStatus.textContent = "✅ OTP sent to your email.";
+        otpStatus.className = "text-green-400 mt-2";
+        otpStatus.classList.remove("hidden");
+      } catch (err) {
+        otpStatus.textContent = `❌ ${err.message}`;
+        otpStatus.className = "text-red-400 mt-2";
+        otpStatus.classList.remove("hidden");
+      }
+    });
+
+    verifyOtpBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const otp = otpInput.value.trim();
+      if (!email || !otp) return alert("Enter email and OTP");
+
+      try {
+        const res = await fetch(`${BASE_URL}/api/otp/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        isOtpVerified = true;
+        otpStatus.textContent = "✅ OTP verified successfully!";
+        otpStatus.className = "text-green-400 mt-2";
+        otpStatus.classList.remove("hidden");
+      } catch (err) {
+        otpStatus.textContent = `❌ ${err.message}`;
+        otpStatus.className = "text-red-400 mt-2";
+        otpStatus.classList.remove("hidden");
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
-      // Provide immediate feedback
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Submitting...';
-      message.classList.add('hidden');
+      submitBtn.textContent = "Submitting...";
+      message.classList.add("hidden");
+
+      if (!isOtpVerified) {
+        message.textContent = "❌ Please verify OTP before submitting.";
+        message.className = "text-center font-semibold pt-2 text-red-400";
+        message.classList.remove("hidden");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Request";
+        return;
+      }
 
       try {
         const res = await fetch(`${BASE_URL}/api/requests`, {
@@ -179,16 +233,15 @@
 
         form.reset();
         message.textContent = "✅ Your request has been posted successfully!";
-        message.className = 'text-center font-semibold pt-2 text-green-400';
+        message.className = "text-center font-semibold pt-2 text-green-400";
 
       } catch (err) {
         message.textContent = `❌ ${err.message}`;
-        message.className = 'text-center font-semibold pt-2 text-red-400';
+        message.className = "text-center font-semibold pt-2 text-red-400";
       } finally {
-        // Re-enable the button
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Request';
-        message.classList.remove('hidden');
+        submitBtn.textContent = "Submit Request";
+        message.classList.remove("hidden");
       }
     });
   </script>

@@ -1,51 +1,32 @@
+// server.js
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const path = require("path");
+
 const connectDB = require("./config/db");
-dotenv.config();
-
-// Routes
-const feedbackRoutes = require('./routes/feedbackRoutes');
-const requestRoutes = require("./routes/requestRoutes");
 const itemRoutes = require("./routes/itemRoutes");
+const requestRoutes = require("./routes/requestRoutes");
+const otpRoutes = require("./routes/otpRoutes");
 
+dotenv.config();
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// ✅ Connect to MongoDB
+// Connect to MongoDB
 connectDB();
 
-// ✅ CORS (MUST come before routes)
-const allowedOrigins = [
-  "http://localhost:5500",                      // local dev (optional)
-  "https://foundit-imky.onrender.com"           // your frontend Render URL
-];
-
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
-
-// ✅ Middleware
+// Middleware
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ✅ API routes (after middleware)
-app.use('/api/feedback', feedbackRoutes);
-app.use("/api/requests", requestRoutes);
+// Routes
 app.use("/api/items", itemRoutes);
+app.use("/api/requests", requestRoutes);
+app.use("/api/otp", otpRoutes);
 
-// ✅ Serve static uploads
-app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+// Serve image uploads (if any)
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
-// ✅ Serve frontend files
-app.use(express.static(path.join(__dirname, "public")));
-
-// ✅ Optional SPA fallback (uncomment if needed)
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "index.html"));
-// });
-
-// ✅ Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

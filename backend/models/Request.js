@@ -19,6 +19,15 @@ const requestSchema = new mongoose.Schema({
     required: true,
   },
   reward: String,
+
+  // 🆕 Email field to identify request owner
+  email: {
+    type: String,
+    required: true,
+    lowercase: true,
+    trim: true,
+  },
+
 }, {
   timestamps: true
 });

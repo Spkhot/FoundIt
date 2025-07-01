@@ -118,6 +118,9 @@
   </div>
 
   <script>
+
+    let userEmail = localStorage.getItem("founditEmail") || "";
+        
     window.addEventListener("load", () => {
     const loader = document.getElementById("loader");
     loader.classList.add("opacity-0");
@@ -212,23 +215,37 @@
       });
     }
 
-    async function deleteRequest(id) {
-      const confirmDelete = confirm("Are you sure you want to delete this request permanently?");
-      if (!confirmDelete) return;
+ async function deleteRequest(id) {
+  if (!userEmail) {
+    userEmail = prompt("🔐 Enter the email you used to post requests:");
+    if (!userEmail) return alert("Email is required to delete.");
+    localStorage.setItem("founditEmail", userEmail);
+  }
 
-      try {
-        const res = await fetch(`${BASE_URL}/api/requests/${id}`, { method: "DELETE" });
-        if (res.ok) {
-          allRequests = allRequests.filter(r => r._id !== id);
-          applyFilters();
-        } else {
-          alert("❌ Failed to delete request. It may have already been removed.");
-        }
-      } catch (err) {
-        console.error("Delete failed:", err);
-        alert("❌ An error occurred while deleting.");
-      }
+  const confirmDelete = confirm("Are you sure you want to delete this request permanently?");
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/requests/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail }),
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      allRequests = allRequests.filter(r => r._id !== id);
+      applyFilters();
+    } else {
+      alert(`❌ ${result.message}`);
     }
+  } catch (err) {
+    console.error("Delete failed:", err);
+    alert("❌ An error occurred while deleting.");
+  }
+}
+
 
     document.addEventListener("DOMContentLoaded", () => {
       loadRequests();
