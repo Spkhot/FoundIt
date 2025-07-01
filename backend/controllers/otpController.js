@@ -9,7 +9,7 @@ function generateOTP() {
 }
 
 // Send OTP to user
-exports.sendOTP = async (req, res) => {
+exports.sendOtp = async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required" });
 
@@ -44,7 +44,7 @@ exports.sendOTP = async (req, res) => {
 };
 
 // Verify OTP
-exports.verifyOTP = (req, res) => {
+exports.verifyOtp = (req, res) => {
   const { email, otp } = req.body;
   if (!email || !otp) return res.status(400).json({ message: "Email and OTP required" });
 
