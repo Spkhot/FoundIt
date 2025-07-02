@@ -3,20 +3,13 @@ const router = express.Router();
 const requestController = require("../controllers/requestController");
 const otpController = require("../controllers/otpController");
 
-// Send OTP to email
+// ✅ OTP Endpoints
 router.post("/otp/send", otpController.sendOTP);
-
-// Verify OTP
 router.post("/otp/verify", otpController.verifyOTP);
 
-// POST a new lost item request (with OTP check)
-router.post("/", requestController.createRequest);
-
-// GET all lost item requests
-router.get("/", requestController.getRequests);
-
-// DELETE a request by ID (only if email matches)
-router.delete("/:id", requestController.deleteRequest);
+// ✅ Lost Item Request Endpoints
+router.post("/", requestController.createRequest);     // Create a new lost item request
+router.get("/", requestController.getRequests);        // Get all requests
+router.delete("/:id", requestController.deleteRequest); // Delete a request (only if email matches)
 
 module.exports = router;
-

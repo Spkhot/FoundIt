@@ -1,33 +1,17 @@
 const mongoose = require("mongoose");
 
 const requestSchema = new mongoose.Schema({
-  productName: {
-    type: String,
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
-  description: String,
-  contact: {
-    type: String,
-    required: true,
-  },
+  productName: { type: String, required: true, trim: true },
+  location: { type: String, required: true, trim: true },
+  description: { type: String, trim: true },
+  contact: { type: String, required: true, trim: true },
   category: {
     type: String,
     required: true,
+    enum: ["wallet", "id", "key", "documents", "shoes", "electronics", "other"]
   },
-  reward: String,
-
-  // 🆕 Email field to identify request owner
-  email: {
-    type: String,
-    required: true,
-    lowercase: true,
-    trim: true,
-  },
-
+  reward: { type: String, trim: true },
+  email: { type: String, required: true, lowercase: true, trim: true }
 }, {
   timestamps: true
 });

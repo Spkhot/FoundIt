@@ -186,27 +186,37 @@
     }
   }
 
-  async function deleteItem() {
-    const confirmDelete = confirm("Are you sure you want to permanently delete this item listing? This action cannot be undone.");
-    if (!confirmDelete || !itemId) return;
+async function deleteItem() {
+  if (!itemId) return;
 
-    try {
-      const res = await fetch(`${BASE_URL}/api/items/${itemId}`, {
-        method: 'DELETE',
-      });
+  const confirmDelete = confirm("⚠️ Are you sure you want to permanently delete this item? This action cannot be undone.");
+  if (!confirmDelete) return;
 
-      if (res.ok) {
-        alert("Item deleted successfully!");
-        window.location.href = "find.html";
-      } else {
-        const errorData = await res.json();
-        alert(`Failed to delete item: ${errorData.message || 'Unknown error'}`);
-      }
-    } catch (err) {
-      console.error("Deletion error:", err);
-      alert("A server error occurred. Could not delete the item.");
+  const email = prompt("To verify you're the owner, please enter the contact email you used:");
+  if (!email || email.trim() === "") return alert("❌ Email is required for verification.");
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/items/${itemId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.trim() })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("✅ Item deleted successfully!");
+      window.location.href = "find.html";
+    } else {
+      alert(`❌ Delete failed: ${data.message || 'Unknown error'}`);
     }
+
+  } catch (err) {
+    console.error("Deletion error:", err);
+    alert("❌ Server error. Could not delete item.");
   }
+}
+
 
   if (itemId) {
     fetchItemDetails(itemId);

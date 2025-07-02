@@ -1,75 +1,87 @@
 const Item = require("../models/Item");
 const cloudinary = require("../utils/cloudinary");
 const fs = require("fs");
+const { isEmailVerified } = require("./otpController");
 
+// ✅ POST /api/items - Create new found item
 exports.createItem = async (req, res) => {
   try {
-    console.log("Fields:", req.body);
-    console.log("File:", req.file);
-
     const { email, productName, category, location, description, contact } = req.body;
-    if (!email) return res.status(400).json({ message: "Email is required for verification" });
 
-    if (!req.file) return res.status(400).json({ message: "Image is required" });
+    if (!email) return res.status(400).json({ message: "Email is required." });
+    if (!isEmailVerified(email)) {
+      return res.status(403).json({ message: "Please verify your email before posting." });
+    }
 
-    const uploadRes = await cloudinary.uploader.upload(req.file.path, { folder: "found-items" });
+    if (!req.file) return res.status(400).json({ message: "Image file is required." });
+
+    // 🔼 Upload to Cloudinary
+    const uploadRes = await cloudinary.uploader.upload(req.file.path, {
+      folder: "found-items",
+    });
+
+    // ✅ Remove local file after upload
     fs.unlinkSync(req.file.path);
 
-    const item = await new Item({
+    const item = new Item({
       productName,
       category,
       location,
       description,
       contact,
-      email,  // Save verified email
+      email,
       imageUrl: uploadRes.secure_url,
-    }).save();
+    });
 
-    res.status(201).json({ message: "Item posted successfully", item });
+    await item.save();
+
+    res.status(201).json({ message: "✅ Item posted successfully", item });
   } catch (e) {
-    console.error("CreateItem error:", e);
-    res.status(500).json({ message: "Server error while creating item" });
+    console.error("❌ createItem error:", e);
+    res.status(500).json({ message: "Server error while posting item." });
   }
 };
 
+// ✅ GET /api/items - Get all items
 exports.getItems = async (req, res) => {
   try {
     const items = await Item.find().sort({ createdAt: -1 });
     res.status(200).json(items);
   } catch (e) {
-    console.error("GetItems error:", e);
-    res.status(500).json({ message: "Server error while fetching items" });
+    console.error("❌ getItems error:", e);
+    res.status(500).json({ message: "Server error while fetching items." });
   }
 };
 
+// ✅ GET /api/items/:id - Get item by ID
 exports.getItemById = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: "Item not found" });
-    }
+    if (!item) return res.status(404).json({ message: "Item not found." });
     res.status(200).json(item);
   } catch (e) {
-    console.error("GetItemById error:", e);
-    res.status(500).json({ message: "Server error while fetching item" });
+    console.error("❌ getItemById error:", e);
+    res.status(500).json({ message: "Server error while fetching item." });
   }
 };
 
+// ✅ DELETE /api/items/:id - Delete item by owner
 exports.deleteItem = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
-    if (!item) return res.status(404).json({ message: "Item not found" });
+    if (!item) return res.status(404).json({ message: "Item not found." });
 
-    // Check if email matches
     const userEmail = req.body.email;
     if (!userEmail || userEmail !== item.email) {
-      return res.status(403).json({ message: "Unauthorized. Only the person who posted this can delete it." });
+      return res.status(403).json({
+        message: "❌ Unauthorized. Only the person who posted this item can delete it.",
+      });
     }
 
     await Item.findByIdAndDelete(req.params.id);
-    res.json({ message: "Deleted successfully." });
+    res.status(200).json({ message: "✅ Item deleted successfully." });
   } catch (e) {
-    console.error("DeleteItem error:", e);
-    res.status(500).json({ message: "Server error while deleting" });
+    console.error("❌ deleteItem error:", e);
+    res.status(500).json({ message: "Server error while deleting item." });
   }
 };

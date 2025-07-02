@@ -223,7 +223,7 @@
         const res = await fetch(`${BASE_URL}/api/requests`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify({ contact: email }),
         });
 
         if (!res.ok) {
